@@ -1,0 +1,13 @@
+saemref:
+  instance:
+    name: saemref
+    user: saemref
+  db:
+    host: ""
+    port: ""
+    name: saemref
+    user: saemref
+    pass: saemref
+  admin:
+    login: admin
+    pass: admin

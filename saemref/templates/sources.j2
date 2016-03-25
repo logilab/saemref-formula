@@ -1,0 +1,41 @@
+{% from "saemref/map.jinja" import saemref with context %}
+[admin]
+
+# cubicweb manager account's login (this user will be created)
+login={{ saemref.admin.login }}
+
+# cubicweb manager account's password
+password={{ saemref.admin.pass }}
+
+[system]
+
+# database driver (postgres, sqlite, sqlserver2005)
+db-driver=postgres
+
+# database host
+db-host={{ saemref.db.host }}
+
+# database port
+db-port={{ saemref.db.port }}
+
+# database name
+db-name={{ saemref.db.name }}
+
+# database namespace (schema) name
+db-namespace=
+
+# database user
+db-user={{ saemref.db.user }}
+
+# database password
+db-password={{ saemref.db.pass }}
+
+# database encoding
+db-encoding=utf8
+
+# set to "Trusted_Connection" if you are using SQLServer and want trusted
+# authentication for the database connection
+db-extra-arguments=
+
+# sql statement timeout, in milliseconds (postgres only)
+db-statement-timeout=0

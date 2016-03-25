@@ -1,0 +1,139 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          saemref
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+
+# chkconfig header
+
+# chkconfig: 345 97 04
+# description: CubicWeb saem_ref
+#
+# processname: /usr/bin/cubicweb-ctl
+
+
+DEBIAN_VERSION=/etc/debian_version
+# Source function library.
+if [ -f $DEBIAN_VERSION ]; then
+   break
+else
+    . /etc/rc.d/init.d/functions
+fi
+
+# Default values (can be overridden below)
+CUBICWEBCTL=/usr/bin/cubicweb-ctl
+
+if [ -f /etc/default/saemref ]; then
+    . /etc/default/saemref
+fi
+
+SERVICE=saemref
+PROCESS=saemref
+
+RETVAL=0
+
+start() {
+    echo -n $"Starting saemref daemon: "
+    if [ -e $DEBIAN_VERSION ]; then
+        if [ -f $LOCKFILE ]; then
+            echo -n "already started, lock file found"
+            RETVAL=1
+        elif $PYTHON $SALTMINION -d $MINION_ARGS >& /dev/null; then
+            echo -n "OK"
+            RETVAL=0
+        fi
+    else
+        if [[ ! -z "$(pidofproc -p /var/run/$SERVICE.pid $PROCESS)" ]]; then
+            RETVAL=$?
+            echo -n "already running"
+        else
+            daemon --check $SERVICE $SALTMINION -d $MINION_ARGS
+            RETVAL=$?
+            [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$SERVICE
+            echo
+            return $RETVAL
+        fi
+    fi
+    RETVAL=$?
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping salt-minion daemon: "
+    if [ -f $SUSE_RELEASE ]; then
+        killproc -TERM $SALTMINION
+        rc_status -v
+        RETVAL=$?
+    elif [ -f $DEBIAN_VERSION ]; then
+        # Added this since Debian's start-stop-daemon doesn't support spawned processes
+        if ps -ef | grep "$PYTHON $SALTMINION" | grep -v grep | awk '{print $2}' | xargs kill &> /dev/null; then
+            echo -n "OK"
+            RETVAL=0
+        else
+            echo -n "Daemon is not started"
+            RETVAL=1
+        fi
+    else
+        killproc $PROCESS
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$SERVICE
+        # tidy up any rogue processes:
+        PROCS=`ps -ef | grep "$SALTMINION" | grep -v grep | awk '{print $2}'`
+        if [ -n "$PROCS" ]; then
+            kill $PROCS &> /dev/null
+            sleep 1
+            PROCS=`ps -ef | grep "$SALTMINION" | grep -v grep | awk '{print $2}'`
+            if [ -n "$PROCS" ]; then
+                kill -9 $PROCS &> /dev/null
+            fi
+        fi
+    fi
+    echo
+}
+
+restart() {
+   stop
+   start
+}
+
+# See how we were called.
+case "$1" in
+    start|stop|restart)
+        $1
+        ;;
+    status)
+        if [ -f $SUSE_RELEASE ]; then
+            echo -n "Checking for service salt-minion "
+            checkproc $SALTMINION
+            rc_status -v
+        elif [ -f $DEBIAN_VERSION ]; then
+            if [ -f $LOCKFILE ]; then
+                RETVAL=0
+                echo "salt-minion is running."
+            else
+                RETVAL=1
+                echo "salt-minion is stopped."
+            fi
+        else
+            status $PROCESS
+            RETVAL=$?
+        fi
+        ;;
+    condrestart)
+        [ -f $LOCKFILE ] && restart || :
+        ;;
+    reload)
+        echo "can't reload configuration, you have to restart it"
+        RETVAL=$?
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|reload}"
+        exit 1
+        ;;
+esac
+exit $RETVAL

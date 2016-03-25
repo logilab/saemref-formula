@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{% import_yaml 'saemref/defaults.yaml' as default_settings %}
+
+{% set os_family_map = salt['grains.filter_by']({
+        'Debian': {},
+        'RedHat': {},
+  },
+  grain="os_family",
+  merge=salt['pillar.get']('template:lookup'))
+%}
+
+{% do default_settings.saemref.update(os_family_map) %}
+
+{% set saemref = salt['pillar.get'](
+        'saemref',
+        default=default_settings.saemref,
+        merge=True,
+    )
+%}

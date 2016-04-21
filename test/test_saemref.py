@@ -21,7 +21,7 @@ def test_packages(Package, name, version):
 @pytest.mark.destructive()
 def test_idempotence(Salt, state, exclude):
     result = Salt("state.sls", state)
-    for _, item in result.items():
+    for item in result.values():
         assert item["result"] is True
 
         if item["name"] in exclude:

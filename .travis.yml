@@ -1,0 +1,13 @@
+sudo: required
+services:
+  - docker
+language: python
+python:
+  - "2.7"
+env:
+  matrix:
+    - IMAGE=centos6
+install:
+  - pip install testinfra
+script:
+  - ./run-tests.py test $IMAGE -v

@@ -69,7 +69,7 @@ def dev(args, remain):
     if not image_exists(tag):
         _build(args.image, args.salt)
     cmd = [
-        "docker", "run", "-d",
+        "docker", "run", "-d", "--hostname", args.image,
         "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
         "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
         "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),

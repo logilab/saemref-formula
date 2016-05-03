@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import os
 import argparse
 import subprocess
@@ -60,7 +61,7 @@ def test(args, remain):
     _build(args.image, True)
 
     import pytest
-    pytest.main(["--docker-image", tag] + remain)
+    return pytest.main(["--docker-image", tag] + remain)
 
 
 def dev(args, remain):
@@ -96,4 +97,4 @@ if __name__ == "__main__":
     parser_test.set_defaults(func=test)
 
     args, remain = parser.parse_known_args()
-    args.func(args, remain)
+    sys.exit(args.func(args, remain))

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import os
 import argparse
 import subprocess
@@ -60,21 +61,28 @@ def test(args, remain):
     _build(args.image, True)
 
     import pytest
-    pytest.main(["--docker-image", tag] + remain)
+    return pytest.main(["--docker-image", tag] + remain)
 
 
 def dev(args, remain):
     tag = get_tag(args.image, args.salt)
     if not image_exists(tag):
         _build(args.image, args.salt)
-    subprocess.call([
-        "docker", "run", "--rm", "-it",
+    cmd = [
+        "docker", "run", "-d", "--hostname", args.image,
         "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
         "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
         "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
         "-v", "{0}/{1}:/srv/formula/{1}".format(BASEDIR, _formula),
-        tag, "/bin/bash",
-    ])
+        tag,
+    ]
+    # Run the container default CMD as pid 1 (init system)
+    docker_id = subprocess.check_output(cmd).strip()
+    try:
+        # Spawn a interactive shell in the container
+        subprocess.call(["docker", "exec", "-it", docker_id, "/bin/bash"])
+    finally:
+        subprocess.call(["docker", "rm", "-f", docker_id])
 
 
 if __name__ == "__main__":
@@ -96,4 +104,4 @@ if __name__ == "__main__":
     parser_test.set_defaults(func=test)
 
     args, remain = parser.parse_known_args()
-    args.func(args, remain)
+    sys.exit(args.func(args, remain))

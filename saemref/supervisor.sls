@@ -54,9 +54,9 @@ supervisor_confdir:
     - user: {{ saemref.instance.user }}
 
 
-/etc/init.d/supervisor:
+/etc/init.d/supervisord:
   file.managed:
-    - source: salt://saemref/files/supervisor.init
+    - source: salt://saemref/files/supervisord.init
     - template: jinja
     - mode: 755
 
@@ -75,5 +75,5 @@ supervisor_confdir:
 
 supervisor-service-running:
   service.running:
-    - name: supervisor
+    - name: supervisord
     - enable: true

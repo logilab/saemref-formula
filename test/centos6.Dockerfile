@@ -6,3 +6,4 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.n
     yum -y install salt-minion python-pygit2 git
 
 ENV LANG en_US.UTF-8
+CMD ["/sbin/init"]

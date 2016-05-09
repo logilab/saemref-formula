@@ -1,4 +1,17 @@
+import time
 import pytest
+
+wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
+
+
+@pytest.fixture
+def _wait_supervisord_started(Service):
+    for _ in range(10):
+        if Service("supervisord").is_running:
+            break
+        time.sleep(1)
+    else:
+        raise RuntimeError("No running supervisord")
 
 
 @pytest.mark.parametrize("name, version", [
@@ -11,12 +24,11 @@ def test_packages(Package, name, version):
     assert pkg.version.startswith(version)
 
 
+@wait_supervisord_started
 @pytest.mark.parametrize("state, exclude", [
     # FIXME: Contain container IP...
     ("saemref", ["/home/saemref/etc/cubicweb.d/saemref/all-in-one.conf"]),
-
-    # FIXME: supervisor service is started here
-    ("saemref.supervisor", ["supervisor"]),
+    ("saemref.supervisor", []),
 ])
 @pytest.mark.destructive()
 def test_idempotence(Salt, state, exclude):

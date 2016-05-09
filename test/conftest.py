@@ -9,7 +9,7 @@ def TestinfraBackend(request):
     # all testinfra fixtures (i.e. modules) depend on it.
 
     docker_id = subprocess.check_output([
-        "docker", "run", "-d", request.param, "tail", "-f", "/dev/null",
+        "docker", "run", "-d", request.param,
     ]).strip()
 
     def teardown():

@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/logilab/saemref-formula.svg?branch=master
+    :target: https://travis-ci.org/logilab/saemref-formula
+
 ===============
 saemref-formula
 ===============

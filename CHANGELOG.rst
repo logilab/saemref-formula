@@ -1,6 +1,6 @@
 saemref formula
 ===============
 
-0.0.0
+0.1.0
 
-- Work in progress
+- Initial implementation, supporting CentOS 6 and 7.

@@ -1,21 +1,9 @@
-{% from "saemref/map.jinja" import saemref, supervisor_confdir with context %}
+{% from "saemref/map.jinja" import saemref, supervisor_confdir, supervisor_conffile with context %}
 
 include:
   - saemref.install
 
-{% if grains['os_family'] == 'Debian' %}
-
-supervisor:
-  pkg:
-    - installed
-
-supervisor_confdir:
-  file.directory:
-    - name: {{ supervisor_confdir }}
-    - require:
-      - pkg: supervisor
-
-{% elif grains['os_family'] == 'RedHat' %}
+{% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '6' %}
 
 python-pip:
   pkg:
@@ -60,10 +48,23 @@ supervisor_confdir:
     - template: jinja
     - mode: 755
 
+{% else %}
+
+supervisor:
+  pkg:
+    - installed
+
+supervisor_confdir:
+  file.directory:
+    - name: {{ supervisor_confdir }}
+    - require:
+      - pkg: supervisor
+
+
 {% endif %}
 
 
-{{ supervisor_confdir }}/saemref.conf:
+{{ supervisor_conffile }}:
   file.managed:
     - source: salt://saemref/files/saemref-supervisor.conf
     - template: jinja

@@ -8,7 +8,7 @@ import subprocess
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 _formula = "saemref"
-_images = ["centos6"]
+_images = ["centos6", "centos7"]
 
 
 def get_tag(image, salt=False):
@@ -44,6 +44,11 @@ def _build(image, salt=False):
             b"ADD {0} /srv/formula/{0}\n"
             b"RUN salt-call -l debug state.highstate\n"
         ).format(_formula)
+        if image in ("centos7",):
+            # Salt fail to enable a systemd service if systemd is not running
+            # (during the docker build phase)
+            # This is a workaround.
+            dockerfile_content += b"RUN systemctl enable supervisord\n"
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
@@ -74,8 +79,13 @@ def dev(args, remain):
         "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
         "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
         "-v", "{0}/{1}:/srv/formula/{1}".format(BASEDIR, _formula),
-        tag,
     ]
+
+    if args.image in ("centos7",):
+        # Systemd require privileged container
+        cmd.append("--privileged")
+    cmd.append(tag)
+
     # Run the container default CMD as pid 1 (init system)
     docker_id = subprocess.check_output(cmd).strip()
     try:

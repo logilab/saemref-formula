@@ -19,9 +19,13 @@ def _wait_supervisord_started(Service):
 
 
 @pytest.fixture
-def _wait_saemref_started(Command, _wait_supervisord_started):
+def _wait_saemref_started(Command, _wait_supervisord_started, is_centos6):
+    if is_centos6:
+        cmd = "su - saemref -c 'supervisorctl status saemref'"
+    else:
+        cmd = "supervisorctl status saemref"
     for _ in range(20):
-        status = Command.check_output("su - saemref -c 'supervisorctl status saemref'").split()
+        status = Command.check_output(cmd).split()
         if status[1] == "RUNNING":
             break
         else:
@@ -29,6 +33,11 @@ def _wait_saemref_started(Command, _wait_supervisord_started):
         time.sleep(1)
     else:
         raise RuntimeError("No running saemref")
+
+
+@pytest.fixture
+def is_centos6(SystemInfo):
+    return SystemInfo.distribution.lower() == "centos" and SystemInfo.release.startswith("6")
 
 
 @pytest.mark.parametrize("name, version", [
@@ -66,12 +75,17 @@ def test_idempotence(Salt, state, exclude):
 
 
 @wait_saemref_started
-def test_saemref_running(Process, Service, Socket, Command):
+def test_saemref_running(Process, Service, Socket, Command, is_centos6):
     assert Service("supervisord").is_enabled
 
     supervisord = Process.get(comm="supervisord")
-    assert supervisord.user == "saemref"
-    assert supervisord.group == "saemref"
+
+    if is_centos6:
+        assert supervisord.user == "saemref"
+        assert supervisord.group == "saemref"
+    else:
+        assert supervisord.user == "root"
+        assert supervisord.group == "root"
 
     cubicweb = Process.get(ppid=supervisord.pid)
     assert cubicweb.comm == "cubicweb-ctl"

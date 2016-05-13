@@ -17,8 +17,15 @@
     )
 %}
 
-{% if grains['os_family'] == 'Debian' %}
-{% set supervisor_confdir = '/etc/supervisor/conf.d' %}
-{% elif grains['os_family'] == 'RedHat' %}
-{% set supervisor_confdir = ['/home', saemref.instance.user, 'etc', 'supervisor.d']|join('/') %}
+{% if grains['os_family'] == 'RedHat' %}
+	{% if grains['osmajorrelease'] == '6' %}
+		{% set supervisor_confdir = ['/home', saemref.instance.user, 'etc', 'supervisor.d']|join('/') %}
+		{% set supervisor_conffile = [supervisor_confdir, 'saemref.conf']|join('/') %}
+	{% else %}
+		{% set supervisor_confdir = '/etc/supervisord.d/' %}
+		{% set supervisor_conffile = [supervisor_confdir, 'saemref.ini']|join('/') %}
+	{% endif %}
+{% else %}
+	{% set supervisor_confdir = '/etc/supervisor/conf.d' %}
+	{% set supervisor_conffile = [supervisor_confdir, 'saemref.conf']|join('/') %}
 {% endif %}

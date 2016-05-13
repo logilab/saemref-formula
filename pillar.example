@@ -4,6 +4,7 @@ saemref:
       name: saemref
       user: saemref
     db:
+      driver: postgres
       host: ""
       port: ""
       name: saemref
@@ -12,3 +13,7 @@ saemref:
     admin:
       login: admin
       pass: admin
+
+postgres:
+  lookup:
+	version: 9.4

@@ -8,9 +8,12 @@ def TestinfraBackend(request):
     # Override the TestinfraBackend fixture,
     # all testinfra fixtures (i.e. modules) depend on it.
 
-    docker_id = subprocess.check_output([
-        "docker", "run", "-d", request.param,
-    ]).strip()
+    cmd = ["docker", "run", "-d"]
+    if "centos7" in request.param:
+        # Systemd require privileged container
+        cmd.append("--privileged")
+    cmd.append(request.param)
+    docker_id = subprocess.check_output(cmd).strip()
 
     def teardown():
         subprocess.check_output(["docker", "rm", "-f", docker_id])

@@ -4,6 +4,7 @@
 
 include:
   - epel
+  - postgres.upstream
 
 logilab_extranet:
   pkgrepo.managed:

@@ -5,7 +5,7 @@ include:
   - saemref.logilab-repo
 
 cubicweb-saem-ref:
-  pkg.installed:
+  pkg.latest:
     - require:
       - pkgrepo: logilab_extranet
 

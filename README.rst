@@ -13,20 +13,47 @@ Available states
 .. contents::
     :local:
 
+``saemref``
+-----------
+
+Equivalent to ``saemref.install`` and ``saemref.config``.
+
 ``saemref.install``
 -------------------
 
-Installs the saemref package from logilab repositories and create an instance.
+Installs the saemref package from logilab repositories and create an instance
+for user ``saemref``.
+
+Cubicweb config files are located in ``~saemref/etc/cubicweb.d/saemref`` and
+``cubicweb-ctl`` can be invoked as user ``saemref`` with environment variable
+``CW_MODE=user``.
+
+The state require the installation of `epel-formula`_ and `postgres-formula`_
+with ``postgres.lookup.version: 9.4`` (see ``pillar.example``).
 
 ``saemref.config``
 ------------------
 
-Manage instance configuration files.
+Only manage instance configuration files.
+
+``saemref.db-create``
+---------------------
+
+Create instance database with ``cubicweb-ctl db-create``.
 
 ``saemref.supervisor``
 ----------------------
 
 Install and manage `supervisor`_ configuration for the saemref installation.
+
++----------+-----------------------------------------------------+-------------------------------------+
+| OS       | Restart instance                                    | Restart supervisor                  |
++==========+=====================================================+=====================================+
+| Centos 6 | ``su - saemref -c 'supervisorctl restart saemref'`` | ``/etc/init.d/supervisord restart`` |
++----------+-----------------------------------------------------+-------------------------------------+
+| Centos 7 | ``supervisorctl restart saemref``                   | ``systemctl restart supervisord``   |
++----------+-----------------------------------------------------+-------------------------------------+
+
 
 
 Testing
@@ -54,3 +81,5 @@ instance ``./run-test.py test centos6 -k idempotence --pdb``.
 .. _supervisor: http://supervisord.org
 .. _docker: https://www.docker.com/
 .. _testinfra: https://testinfra.readthedocs.org/
+.. _epel-formula: https://github.com/saltstack-formulas/epel-formula
+.. _postgres-formula: https://github.com/saltstack-formulas/postgres-formula

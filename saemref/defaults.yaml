@@ -2,6 +2,7 @@ saemref:
   instance:
     name: saemref
     user: saemref
+    base_url: ""
   db:
     driver: postgres
     host: ""

@@ -42,7 +42,7 @@ def is_centos6(SystemInfo):
 
 @pytest.mark.parametrize("name, version", [
     ("cubicweb", "3.22.2"),
-    ("cubicweb-saem-ref", "0.11.0"),
+    ("cubicweb-saem-ref", "0.11.1"),
 ])
 def test_packages(Package, name, version):
     pkg = Package(name)

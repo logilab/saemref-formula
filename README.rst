@@ -59,6 +59,11 @@ Install and manage `supervisor`_ configuration for the saemref installation.
 | Centos 7 | ``supervisorctl restart saemref``                   | ``systemctl restart supervisord``   |
 +----------+-----------------------------------------------------+-------------------------------------+
 
+Requirements
+============
+
+If using postgres as database driver, ensure the `postgres contrib`_ package is
+installed on server side.
 
 
 Testing
@@ -88,3 +93,4 @@ instance ``./run-test.py test centos6 -k idempotence --pdb``.
 .. _testinfra: https://testinfra.readthedocs.org/
 .. _epel-formula: https://github.com/saltstack-formulas/epel-formula
 .. _postgres-formula: https://github.com/saltstack-formulas/postgres-formula
+.. _postgres contrib: https://www.postgresql.org/docs/current/static/contrib.html

@@ -3,7 +3,7 @@
 include:
   - saemref
 
-cubicweb-initdb:
+cubicweb-db-create:
   cmd.run:
     - name: cubicweb-ctl db-create -a {{ saemref.instance.name }}
     - user: {{ saemref.instance.user }}

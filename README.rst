@@ -39,7 +39,12 @@ Only manage instance configuration files.
 ``saemref.db-create``
 ---------------------
 
-Create instance database with ``cubicweb-ctl db-create``.
+Create instance database with ``cubicweb-ctl db-create`` (call implicitly ``db-init``).
+
+``saemref.db-init``
+---------------------
+
+Initialize instance database schema with ``cubicweb-ctl db-init``.
 
 ``saemref.supervisor``
 ----------------------

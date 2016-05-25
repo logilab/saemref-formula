@@ -4,6 +4,8 @@ saemref:
     user: saemref
     base_url:
     port:
+    anonymous_user:
+    anonymous_password:
   db:
     driver: postgres
     host: ""

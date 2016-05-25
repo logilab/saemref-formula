@@ -5,6 +5,9 @@ saemref:
       user: saemref
       # http port
       port: 8000
+      # Anonymous user
+      anonymous_user: "john"
+      anonymous_password: "secret"
     db:
       driver: postgres
       host: ""

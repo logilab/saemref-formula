@@ -157,11 +157,11 @@ repository-uri=inmemory://
 
 # login of the CubicWeb user account to use for anonymous user (if you want to
 # allow anonymous)
-#anonymous-user=
+{{ config('anonymous-user', saemref.instance.anonymous_user) }}
 
 # password of the CubicWeb user account to use for anonymous user, if
 # anonymous-user is set
-#anonymous-password=
+{{ config('anonymous-password', saemref.instance.anonymous_password) }}
 
 # web instance query log file
 #query-log-file=

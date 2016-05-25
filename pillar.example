@@ -3,6 +3,8 @@ saemref:
     instance:
       name: saemref
       user: saemref
+      # http port
+      port: 8000
     db:
       driver: postgres
       host: ""

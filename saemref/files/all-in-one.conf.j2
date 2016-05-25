@@ -1,0 +1,250 @@
+{%- from "saemref/map.jinja" import saemref with context -%}
+{%- macro config(key, value) -%}
+{%- if value -%}
+{{ key }}={{ value }}
+{%- else -%}
+#{{ key }}=
+{%- endif -%}
+{%- endmacro -%}
+[BOOTSTRAP]
+
+# use compat css rules (enable if your application uses views that have not
+# been ported to bootstrap)
+cw_compatibility=no
+
+
+[EMAIL]
+
+# when a notification should be sent with no specific rules to find recipients,
+# recipients will be found according to this mode. Available modes are
+# "default-dest-addrs" (emails specified in the configuration variable with the
+# same name), "users" (every users which has activated account with an email
+# set), "none" (no notification).
+default-recipients-mode=default-dest-addrs
+
+# comma separated list of email addresses that will be used as default
+# recipient when an email is sent and the notification has no specific
+# recipient rules.
+default-dest-addrs=
+
+# comma separated list of email addresses that will be notified of every
+# changes.
+supervising-addrs=
+
+# don't display actual email addresses but mangle them if this option is set to
+# yes
+mangle-emails=no
+
+# hostname of the SMTP mail server
+smtp-host=mail
+
+# listening port of the SMTP mail server
+smtp-port=25
+
+# name used as HELO name for outgoing emails from the repository.
+sender-name={{ saemref.instance.user }}
+
+# email address used as HELO address for outgoing emails from the repository
+sender-addr=cubicweb@mydomain.com
+
+
+[GMAP]
+
+# the google map key used to display postal address on google map
+gmap-key=
+
+
+[MAIN]
+
+# web server root url on https. By specifying this option your site can be
+# available as an http and https site. Authenticated users will in this case be
+# authenticated and once done navigate through the https site. IMPORTANTE NOTE:
+# to do this work, you should have your apache redirection include "https" as
+# base url path so cubicweb can differentiate between http vs https access. For
+# instance: RewriteRule ^/demo/(.*) http://127.0.0.1:8080/https/$1 [L,P] where
+# the cubicweb web server is listening on port 8080.
+#https-url=
+
+# host name if not correctly detectable through gethostname
+#host=
+
+# repository's pid file
+pid-file=/tmp/{{ saemref.instance.name }}-all-in-one.pid
+
+# if this option is set, use the specified user to start the repository rather
+# than the user running the command
+#uid=
+
+# duration of inactivity after which a session will be closed, to limit memory
+# consumption (avoid sessions that never expire and cause memory leak when
+# http-session-time is 0, or because of bad client that never closes their
+# connection). So notice that even if http-session-time is 0 and the user don't
+# close his browser, he will have to reauthenticate after this time of
+# inactivity. Default to 24h.
+cleanup-session-time=1d
+
+# size of the connections pool. Each source supporting multiple connections
+# will have this number of opened connections.
+connections-pool-size=4
+
+# size of the parsed rql cache size.
+rql-cache-size=3000
+
+# enable undo support
+undo-enabled=no
+
+# number of days during which transaction records should be kept (hence
+# undoable).
+keep-transaction-lifetime=7
+
+# defines which entity types from this repository are used by some other
+# instances. You should set this properly for these instances to detect updates
+# / deletions.
+multi-sources-etypes=
+
+# When full text indexation of entity has a too important cost to be done when
+# entity are added/modified by users, activate this option and setup a job
+# using cubicweb-ctl db-rebuild-fti on your system (using cron for instance).
+delay-full-text-indexation=no
+
+# server's log level
+log-threshold=WARNING
+
+# permission umask for files created by the server
+umask=63
+
+# web server root url
+{{ config('base-url', saemref.instance.base_url) }}
+
+# allow users to login with their primary email if set
+allow-email-login=no
+
+# file where output logs should be written
+log-file=/tmp/{{ saemref.instance.name }}-all-in-one.log
+
+# UDP address of the statsd endpoint; it must be formattedlike <ip>:<port>;
+# disabled is unset.
+statsd-endpoint=
+
+# interval (in seconds) at which stats are dumped in the logstat file; set 0 to
+# disable
+logstat-interval=0
+
+# file where stats for the instance should be written
+logstat-file=/tmp/{{ saemref.instance.name }}-all-in-one.stats
+
+
+[WEB]
+
+# http server port number (default to 8080)
+{{ config('port', saemref.instance.port) }}
+
+# http server address on which to listen (default to everywhere)
+interface=
+
+# maximum length of HTTP request. Default to 100 MB.
+max-post-length=100MB
+
+# profile code and use the specified file to store stats if this option is set
+#profile=
+
+# size of twisted's reactor threadpool. It should probably be not too much
+# greater than connection-poolsize
+webserver-threadpool-size=4
+
+# see `cubicweb.dbapi.connect` documentation for possible value
+repository-uri=inmemory://
+
+# login of the CubicWeb user account to use for anonymous user (if you want to
+# allow anonymous)
+{{ config('anonymous-user', saemref.instance.anonymous_user) }}
+
+# password of the CubicWeb user account to use for anonymous user, if
+# anonymous-user is set
+{{ config('anonymous-password', saemref.instance.anonymous_password) }}
+
+# web instance query log file
+#query-log-file=
+
+# base url for static data, if different from "${base-url}/data/". If served
+# from a different domain, that domain should allow cross-origin requests.
+#datadir-url=
+
+# authentication mode (cookie / http)
+auth-mode=cookie
+
+# realm to use on HTTP authentication mode
+realm=cubicweb
+
+# duration of the cookie used to store session identifier. If 0, the cookie
+# will expire when the user exist its browser. Should be 0 or greater than
+# repository's session-time.
+http-session-time=0
+
+# Same as cleanup-session-time but specific to anonymous sessions. You can have
+# a much smaller timeout here since it will be transparent to the user. Default
+# to 5min.
+cleanup-anonymous-session-time=5min
+
+# regular expression matching URLs that may be embeded. leave it blank if you
+# don't want the embedding feature, or set it to ".*" if you want to allow
+# everything
+#embed-allowed=
+
+# Mail used as recipient to report bug in this instance, if you want this
+# feature on
+#submit-mail=
+
+# use Accept-Language http header to try to set user interface's language
+# according to browser defined preferences
+language-negociation=yes
+
+# print the traceback on the error page when an error occurred
+print-traceback=yes
+
+# True type font to use for captcha image generation (you must have the python
+# imaging library installed to use captcha)
+captcha-font-file=/usr/share/cubicweb/cubes/shared/data/porkys.ttf
+
+# Font size to use for captcha image generation (you must have the python
+# imaging library installed to use captcha)
+captcha-font-size=25
+
+# use modconcat-like URLS to concat and serve JS / CSS files
+concat-resources=no
+
+# anonymize the connection before executing any jsonp query.
+anonymize-jsonp-queries=yes
+
+# Generate the static data resource directory on upgrade.
+generate-staticdir=yes
+
+# The static data resource directory path.
+#staticdir-path=
+
+# comma-separated list of allowed origin domains or "*" for any domain
+access-control-allow-origin=
+
+# comma-separated list of allowed HTTP methods
+access-control-allow-methods=
+
+# maximum age of cross-origin resource sharing (in seconds)
+#access-control-max-age=
+
+# comma-separated list of HTTP headers the application declare in response to a
+# preflight request
+access-control-expose-headers=
+
+# comma-separated list of HTTP headers the application may set in the response
+access-control-allow-headers=
+
+
+[ZMQ]
+
+# List of ZMQ addresses to subscribe to (requires pyzmq) (of the form
+# `tcp://<ipaddr>:<port>`)
+zmq-address-sub=
+
+# ZMQ address to use for publishing (requires pyzmq) (of the form
+# `tcp://<ipaddr>:<port>`)
+#zmq-address-pub=

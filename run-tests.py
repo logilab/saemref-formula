@@ -42,7 +42,7 @@ def _build(image, salt=False):
             b"ADD test/salt /srv/salt\n"
             b"ADD test/pillar /srv/pillar\n"
             b"ADD {0} /srv/formula/{0}\n"
-            b"RUN salt-call -l debug state.highstate\n"
+            b"RUN salt-call --hard-crash -l debug state.highstate\n"
         ).format(_formula)
         if image in ("centos7",):
             # Salt fail to enable a systemd service if systemd is not running

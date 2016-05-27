@@ -1,6 +1,6 @@
 saemref:
   instance:
-    base_url: http://{{ grains['fqdn_ip4'][0] }}:8080
+    base_url: http://{{ grains['ipv4'][1] }}:8080
   db:
     driver: sqlite
     name: /home/saemref/saemref.db

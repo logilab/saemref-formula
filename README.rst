@@ -84,7 +84,7 @@ The command ``./run-test.py test centos6`` built a provisioned image
 (highstate) and run testinfra tests on it.
 
 Note that you can add any parameters that testinfra (pytest) accept, for
-instance ``./run-test.py test centos6 -k idempotence --pdb``.
+instance ``./run-test.py test centos6 -- -k idempotence --pdb``.
 
 
 .. _saem_ref: https://www.cubicweb.org/project/cubicweb-saem_ref

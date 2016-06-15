@@ -1,6 +1,7 @@
 import subprocess
 import pytest
 import testinfra
+import time
 
 
 @pytest.fixture
@@ -49,3 +50,35 @@ def pytest_generate_tests(metafunc):
 
         metafunc.parametrize(
             "TestinfraBackend", images.split(","), indirect=True, scope=scope)
+
+
+@pytest.fixture
+def _wait_supervisord_started(Service):
+    for _ in range(10):
+        if Service("supervisord").is_running:
+            break
+        time.sleep(1)
+    else:
+        raise RuntimeError("No running supervisord")
+
+
+@pytest.fixture
+def _wait_saemref_started(Command, _wait_supervisord_started, is_centos6):
+    if is_centos6:
+        cmd = "su - saemref -c 'supervisorctl status saemref'"
+    else:
+        cmd = "supervisorctl status saemref"
+    for _ in range(20):
+        status = Command.check_output(cmd).split()
+        if status[1] == "RUNNING":
+            break
+        else:
+            assert status[1] in ("STARTING", "BACKOFF")
+        time.sleep(1)
+    else:
+        raise RuntimeError("No running saemref")
+
+
+@pytest.fixture
+def is_centos6(SystemInfo):
+    return SystemInfo.distribution.lower() == "centos" and SystemInfo.release.startswith("6")

@@ -75,7 +75,8 @@ def build(image, salt):
 @image_option
 def test(ctx, image):
     tag = get_tag(image, True)
-    ctx.invoke(build, image=image, salt=True)
+    if not image_exists(tag):
+        ctx.invoke(build, image=image, salt=True)
 
     import pytest
     return pytest.main(["--docker-image", tag] + ctx.args)

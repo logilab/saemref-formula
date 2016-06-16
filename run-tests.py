@@ -77,9 +77,12 @@ def test(ctx, image):
     tag = get_tag(image, True)
     if not image_exists(tag):
         ctx.invoke(build, image=image, salt=True)
+    postgres_tag = get_tag("postgres", False)
+    if not image_exists(tag):
+        ctx.invoke(build, image="postgres", salt=False)
 
     import pytest
-    return pytest.main(["--docker-image", tag] + ctx.args)
+    return pytest.main(["--docker-image", tag, "--postgres-image", postgres_tag] + ctx.args)
 
 
 @cli.command(help="Run a container and spawn an interactive shell inside")

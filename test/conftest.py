@@ -5,7 +5,7 @@ import time
 
 
 @pytest.fixture
-def TestinfraBackend(request):
+def TestinfraBackend(pytestconfig, request):
     # Override the TestinfraBackend fixture,
     # all testinfra fixtures (i.e. modules) depend on it.
 
@@ -13,11 +13,25 @@ def TestinfraBackend(request):
     if "centos7" in request.param:
         # Systemd require privileged container
         cmd.append("--privileged")
+
+    if getattr(request.function, "use_postgres"):
+        postgres_id = subprocess.check_output([
+            "docker", "run", "-d", pytestconfig.getoption('postgres_image'),
+        ]).strip()
+        cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
+    else:
+        postgres_id = None
+
+    if getattr(request.function, "docker_addopts"):
+        cmd.extend(list(request.function.docker_addopts.args))
+
     cmd.append(request.param)
     docker_id = subprocess.check_output(cmd).strip()
 
     def teardown():
         subprocess.check_output(["docker", "rm", "-f", docker_id])
+        if postgres_id is not None:
+            subprocess.check_output(["docker", "rm", "-f", postgres_id])
 
     # Destroy the container at the end of the fixture life
     request.addfinalizer(teardown)
@@ -30,6 +44,12 @@ def pytest_addoption(parser):
     parser.addoption(
         "--docker-image", action="store", dest="docker_image",
         help="docker image(s) to test")
+    parser.addoption(
+        "--postgres-image", action="store", dest="postgres_image",
+        help="postgres image to use in postgres tests")
+    parser.addoption(
+        "--upgrade-revision", action="store",
+        help="List of hg revision to test against (use 'master' for latest public changeset)")
 
 
 def pytest_generate_tests(metafunc):
@@ -50,6 +70,11 @@ def pytest_generate_tests(metafunc):
 
         metafunc.parametrize(
             "TestinfraBackend", images.split(","), indirect=True, scope=scope)
+    if 'saem_ref_upgrade_revision' in metafunc.fixturenames:
+        if not metafunc.config.option.upgrade_revision:
+            pytest.skip()
+        else:
+            metafunc.parametrize('saem_ref_upgrade_revision', [metafunc.config.option.upgrade_revision])
 
 
 @pytest.fixture

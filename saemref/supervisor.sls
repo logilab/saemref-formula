@@ -75,6 +75,15 @@ supervisor_confdir:
       - file: supervisor_confdir
 
 supervisor-service-running:
+{% if salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! test -d /run/systemd"') == 0 %}
+{#
+Salt fail to enable a systemd service if systemd is not running (during the
+docker build phase) This is a workaround.
+#}
+  cmd.run:
+    - name: systemctl enable supervisord
+{% else %}
   service.running:
     - name: supervisord
     - enable: true
+{% endif %}

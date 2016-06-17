@@ -52,13 +52,8 @@ def build(image, salt):
             b"ADD test/salt /srv/salt\n"
             b"ADD test/pillar /srv/pillar\n"
             b"ADD {0} /srv/formula/{0}\n"
-            b"RUN salt-call --hard-crash -l debug state.highstate\n"
+            b"RUN salt-call --hard-crash --retcode-passthrough -l debug state.highstate\n"
         ).format(_formula)
-        if image in ("centos7",):
-            # Salt fail to enable a systemd service if systemd is not running
-            # (during the docker build phase)
-            # This is a workaround.
-            dockerfile_content += b"RUN systemctl enable supervisord\n"
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
@@ -82,7 +77,7 @@ def test(ctx, image):
         ctx.invoke(build, image="postgres", salt=False)
 
     import pytest
-    return pytest.main(["--docker-image", tag, "--postgres-image", postgres_tag] + ctx.args)
+    ctx.exit(pytest.main(["--docker-image", tag, "--postgres-image", postgres_tag] + ctx.args))
 
 
 @cli.command(help="Run a container and spawn an interactive shell inside")

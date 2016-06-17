@@ -14,16 +14,16 @@ def TestinfraBackend(pytestconfig, request):
         # Systemd require privileged container
         cmd.append("--privileged")
 
-    if getattr(request.function, "use_postgres"):
-        postgres_id = subprocess.check_output([
-            "docker", "run", "-d", pytestconfig.getoption('postgres_image'),
-        ]).strip()
-        cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
-    else:
-        postgres_id = None
+    postgres_id = None
+    if request.scope == "function":
+        if hasattr(request.function, "use_postgres"):
+            postgres_id = subprocess.check_output([
+                "docker", "run", "-d", pytestconfig.getoption('postgres_image'),
+            ]).strip()
+            cmd.extend(["--link", "{0}:postgres".format(postgres_id)])
 
-    if getattr(request.function, "docker_addopts"):
-        cmd.extend(list(request.function.docker_addopts.args))
+        if hasattr(request.function, "docker_addopts"):
+            cmd.extend(list(request.function.docker_addopts.args))
 
     cmd.append(request.param)
     docker_id = subprocess.check_output(cmd).strip()
@@ -66,6 +66,10 @@ def pytest_generate_tests(metafunc):
         if getattr(metafunc.function, "destructive", None) is not None:
             scope = "function"
         else:
+            for marker in ("use_postgres", "docker_addopts"):
+                if hasattr(metafunc.function, marker):
+                    raise RuntimeError(
+                        "You cannot use %s marker on a non destructive test" % (marker,))
             scope = "session"
 
         metafunc.parametrize(

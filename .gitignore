@@ -1,2 +1,3 @@
 .cache
 test/*_salted.Dockerfile
+test/dumps/*.tar.gz

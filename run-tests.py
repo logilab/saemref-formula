@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
-import sys
+import click
 import os
-import argparse
 import subprocess
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 _formula = "saemref"
-_images = ["centos6", "centos7"]
 
 
 def get_tag(image, salt=False):
@@ -31,7 +29,19 @@ def image_exists(image):
         raise RuntimeError("Cannot test if image exists")
 
 
-def _build(image, salt=False):
+image_option = click.argument("image", type=click.Choice(["centos6", "centos7"]))
+salt_option = click.option('--salt', is_flag=True, help="Run salt highstate")
+
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command(help="Build a container")
+@image_option
+@salt_option
+def build(image, salt):
     dockerfile = "test/{0}.Dockerfile".format(image)
     tag = get_tag(image, salt)
     if salt:
@@ -57,31 +67,41 @@ def _build(image, salt=False):
     ])
 
 
-def build(args, remain):
-    _build(args.image, args.salt)
-
-
-def test(args, remain):
-    tag = get_tag(args.image, True)
-    _build(args.image, True)
+@cli.command(
+    help="Build a salted (highstate) container and run tests on it",
+    context_settings={"allow_extra_args": True},
+)
+@click.pass_context
+@image_option
+def test(ctx, image):
+    tag = get_tag(image, True)
+    if not image_exists(tag):
+        ctx.invoke(build, image=image, salt=True)
+    postgres_tag = get_tag("postgres", False)
+    if not image_exists(tag):
+        ctx.invoke(build, image="postgres", salt=False)
 
     import pytest
-    return pytest.main(["--docker-image", tag] + remain)
+    return pytest.main(["--docker-image", tag, "--postgres-image", postgres_tag] + ctx.args)
 
 
-def dev(args, remain):
-    tag = get_tag(args.image, args.salt)
+@cli.command(help="Run a container and spawn an interactive shell inside")
+@click.pass_context
+@image_option
+@salt_option
+def dev(ctx, image, salt):
+    tag = get_tag(image, salt)
     if not image_exists(tag):
-        _build(args.image, args.salt)
+        ctx.invoke(build, image=image, salt=salt)
     cmd = [
-        "docker", "run", "-d", "--hostname", args.image,
+        "docker", "run", "-d", "--hostname", image,
         "-v", "{0}/test/minion.conf:/etc/salt/minion.d/minion.conf".format(BASEDIR),
         "-v", "{0}/test/salt:/srv/salt".format(BASEDIR),
         "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
         "-v", "{0}/{1}:/srv/formula/{1}".format(BASEDIR, _formula),
     ]
 
-    if args.image in ("centos7",):
+    if image in ("centos7",):
         # Systemd require privileged container
         cmd.append("--privileged")
     cmd.append(tag)
@@ -96,22 +116,4 @@ def dev(args, remain):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Test {0} formula in docker".format(_formula))
-    subparsers = parser.add_subparsers(help="sub-command help")
-
-    parser_build = subparsers.add_parser("build", help="build images")
-    parser_build.add_argument("image", choices=_images)
-    parser_build.add_argument("--salt", action="store_true")
-    parser_build.set_defaults(func=build)
-
-    parser_dev = subparsers.add_parser("dev", help="drop a shell in dev container")
-    parser_dev.add_argument("image", choices=_images)
-    parser_dev.add_argument("--salt", action="store_true")
-    parser_dev.set_defaults(func=dev)
-
-    parser_test = subparsers.add_parser("test", help="provision a container and run tests on it")
-    parser_test.add_argument("image", choices=_images)
-    parser_test.set_defaults(func=test)
-
-    args, remain = parser.parse_known_args()
-    sys.exit(args.func(args, remain))
+    cli()

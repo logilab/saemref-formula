@@ -1,0 +1,3 @@
+saemref:
+  install:
+    dev: true

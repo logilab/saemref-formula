@@ -7,14 +7,21 @@ wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
 wait_saemref_started = pytest.mark.usefixtures("_wait_saemref_started")
 
 
-@pytest.mark.parametrize("name, version", [
-    ("cubicweb", "3.22.2"),
-    ("cubicweb-saem-ref", "0.11.1"),
-])
-def test_packages(Package, name, version):
-    pkg = Package(name)
-    assert pkg.is_installed
-    assert pkg.version.startswith(version)
+def test_package_saem_ref(Package):
+    cube = Package("cubicweb-saem-ref")
+    assert cube.is_installed
+    assert cube.version.startswith("0.11.1")
+
+
+def test_package_cubicweb(Package, SystemInfo):
+    if SystemInfo.distribution == "centos":
+        name = "cubicweb"
+    else:  # Debian
+        name = "cubicweb-server"
+
+    cubicweb = Package(name)
+    assert cubicweb.is_installed
+    assert cubicweb.version.startswith("3.22.2")
 
 
 @wait_supervisord_started
@@ -42,8 +49,8 @@ def test_idempotence(Salt, state, exclude):
 
 
 @wait_saemref_started
-def test_saemref_running(Process, Service, Socket, Command, is_centos6):
-    assert Service("supervisord").is_enabled
+def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervisor_service_name):
+    assert Service(supervisor_service_name).is_enabled
 
     supervisord = Process.get(comm="supervisord")
 

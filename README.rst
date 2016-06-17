@@ -51,13 +51,13 @@ Initialize instance database schema with ``cubicweb-ctl db-init``.
 
 Install and manage `supervisor`_ configuration for the saemref installation.
 
-+----------+-----------------------------------------------------+-------------------------------------+
-| OS       | Restart instance                                    | Restart supervisor                  |
-+==========+=====================================================+=====================================+
-| Centos 6 | ``su - saemref -c 'supervisorctl restart saemref'`` | ``/etc/init.d/supervisord restart`` |
-+----------+-----------------------------------------------------+-------------------------------------+
-| Centos 7 | ``supervisorctl restart saemref``                   | ``systemctl restart supervisord``   |
-+----------+-----------------------------------------------------+-------------------------------------+
++--------------------------+-----------------------------------------------------+-------------------------------------+
+| OS                       | Restart instance                                    | Restart supervisor                  |
++==========================+=====================================================+=====================================+
+| Centos 6                 | ``su - saemref -c 'supervisorctl restart saemref'`` | ``/etc/init.d/supervisord restart`` |
++--------------------------+-----------------------------------------------------+-------------------------------------+
+| Centos 7 / Debian Jessie | ``supervisorctl restart saemref``                   | ``systemctl restart supervisord``   |
++--------------------------+-----------------------------------------------------+-------------------------------------+
 
 Requirements
 ============

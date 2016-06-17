@@ -10,9 +10,11 @@ def TestinfraBackend(pytestconfig, request):
     # all testinfra fixtures (i.e. modules) depend on it.
 
     cmd = ["docker", "run", "-d"]
-    if "centos7" in request.param:
-        # Systemd require privileged container
-        cmd.append("--privileged")
+    for dist in ("centos7", "jessie"):
+        if dist in request.param:
+            # Systemd require privileged container
+            cmd.append("--privileged")
+            break
 
     postgres_id = None
     if request.scope == "function":
@@ -82,9 +84,17 @@ def pytest_generate_tests(metafunc):
 
 
 @pytest.fixture
-def _wait_supervisord_started(Service):
+def supervisor_service_name(SystemInfo):
+    if SystemInfo.distribution == "centos":
+        return "supervisord"
+    else:
+        return "supervisor"
+
+
+@pytest.fixture
+def _wait_supervisord_started(Service, supervisor_service_name):
     for _ in range(10):
-        if Service("supervisord").is_running:
+        if Service(supervisor_service_name).is_running:
             break
         time.sleep(1)
     else:

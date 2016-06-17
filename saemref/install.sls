@@ -4,10 +4,28 @@
 include:
   - saemref.logilab-repo
 
-cubicweb-saem-ref:
+cube-packages:
   pkg.latest:
+    - pkgs:
+      - cubicweb-saem-ref
+    {% if grains['os_family'] == 'Debian' %}
+      - cubicweb-ctl
+      - cubicweb-server
+      - cubicweb-twisted
+    - skip_verify: true {# FIXME: key expired... #}
+    - require:
+      - pkgrepo: logilab-public-acceptance
+    {% else %}{# RedHat #}
     - require:
       - pkgrepo: logilab_extranet
+    {% endif %}
+
+{% if grains['os_family'] == 'Debian' %}
+# FIXME: https://www.logilab.org/ticket/6302914 workaround
+python-logilab-common:
+  pkg.installed:
+    - version: 1.1.0-1
+{% endif %}
 
 create-saemref-user:
   user.present:
@@ -21,5 +39,5 @@ cubicweb-create:
     - env:
         CW_MODE: user
     - require:
-        - pkg: cubicweb-saem-ref
+        - pkg: cube-packages
         - user: {{ saemref.instance.user }}

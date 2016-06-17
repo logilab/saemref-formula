@@ -8,6 +8,7 @@ env:
   matrix:
     - IMAGE=centos6
     - IMAGE=centos7
+    - IMAGE=jessie
 install:
   - pip install -r test-requirements.txt
 script:

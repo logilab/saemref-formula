@@ -62,7 +62,16 @@ def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervis
         assert supervisord.group == "root"
 
     cubicweb = Process.get(ppid=supervisord.pid)
-    assert cubicweb.comm == "cubicweb-ctl"
+
+    if not is_centos6:
+        assert cubicweb.comm == "uwsgi"
+        # Should have 2 worker process with 8 thread each and 1 http proccess with one thread
+        child_threads = sorted([c.nlwp for c in Process.filter(ppid=cubicweb.pid)])
+        assert child_threads == [1, 8, 8]
+    else:
+        # twisted
+        assert cubicweb.comm == "cubicweb-ctl"
+
     assert cubicweb.user == "saemref"
     assert cubicweb.group == "saemref"
 

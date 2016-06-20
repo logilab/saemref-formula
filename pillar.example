@@ -8,6 +8,21 @@ saemref:
       # Anonymous user
       anonymous_user: "john"
       anonymous_password: "secret"
+
+      # wsgi settings
+      # 2 * 8 = can handle 16 concurrent request
+      # and will use 16 database connections.
+      wsgi: true
+      wsgi_workers: 2
+      wsgi_threads: 8
+
+      # Cookie signing secret key. This parameter is MANDATORY and must be
+      # different accross installations. Generate a strong key using a
+      # generator (for example: pwgen -s 40 -1)
+      cookie_secret_key: SET_ME
+
+      # Pool size must be equal to wsgi_threads when using wsgi
+      pool_size: 8
     db:
       driver: postgres
       host: ""

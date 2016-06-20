@@ -1,6 +1,11 @@
 saemref:
   instance:
-    base_url: http://{{ grains['ipv4'][1] }}:8080
+    {% for ip in grains['ipv4'] -%}
+    {% if ip != '127.0.0.1' -%}
+    base_url: http://{{ ip }}:8080
+    {% break %}
+    {% endif %}
+    {% endfor %}
   db:
     driver: sqlite
     name: /home/saemref/saemref.db

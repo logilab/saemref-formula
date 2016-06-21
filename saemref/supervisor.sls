@@ -1,4 +1,4 @@
-{% from "saemref/map.jinja" import saemref, supervisor_confdir, supervisor_conffile with context %}
+{% from "saemref/map.jinja" import saemref, supervisor_confdir, supervisor_conffile, supervisor_service_name with context %}
 
 include:
   - saemref.install
@@ -81,9 +81,9 @@ Salt fail to enable a systemd service if systemd is not running (during the
 docker build phase) This is a workaround.
 #}
   cmd.run:
-    - name: systemctl enable supervisord
+    - name: systemctl enable {{ supervisor_service_name }}
 {% else %}
   service.running:
-    - name: supervisord
+    - name: {{ supervisor_service_name }}
     - enable: true
 {% endif %}

@@ -29,7 +29,7 @@ def image_exists(image):
         raise RuntimeError("Cannot test if image exists")
 
 
-image_option = click.argument("image", type=click.Choice(["centos6", "centos7"]))
+image_option = click.argument("image", type=click.Choice(["centos6", "centos7", "jessie"]))
 salt_option = click.option('--salt', is_flag=True, help="Run salt highstate")
 
 
@@ -96,7 +96,7 @@ def dev(ctx, image, salt):
         "-v", "{0}/{1}:/srv/formula/{1}".format(BASEDIR, _formula),
     ]
 
-    if image in ("centos7",):
+    if image in ("centos7", "jessie"):
         # Systemd require privileged container
         cmd.append("--privileged")
     cmd.append(tag)

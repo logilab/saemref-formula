@@ -21,7 +21,7 @@ def test_package_cubicweb(Package, SystemInfo):
 
     cubicweb = Package(name)
     assert cubicweb.is_installed
-    assert cubicweb.version.startswith("3.22.2")
+    assert cubicweb.version.startswith("3.23.0")
 
 
 @wait_supervisord_started
@@ -79,3 +79,8 @@ def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervis
 
     html = Command.check_output("curl http://localhost:8080")
     assert "<title>accueil (Référentiel SAEM)</title>" in html
+
+
+def test_saemref_sync_source_cronjob(Command):
+    jobs = Command.check_output("crontab -u saemref -l").splitlines()
+    assert '* */1 * * * CW_MODE=user cubicweb-ctl source-sync --loglevel error saemref' in jobs

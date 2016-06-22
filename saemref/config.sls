@@ -24,4 +24,10 @@ include:
     - template: jinja
     - user: {{ saemref.instance.user }}
     - group: {{ saemref.instance.user }}
+
+
+CW_MODE=user cubicweb-ctl source-sync --loglevel error {{ saemref.instance.name }}:
+  cron.present:
+    - user: {{ saemref.instance.user }}
+    - hour: "*/1"
 {% endif %}

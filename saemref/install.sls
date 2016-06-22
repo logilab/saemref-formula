@@ -59,6 +59,7 @@ wsgi-packages:
       - pkgrepo: backports
     {% else %}{# RedHat #}
       - pyramid_redis_sessions
+      - crontabs
     - require:
       - pkgrepo: logilab_extranet
     {% endif %}

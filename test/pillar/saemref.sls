@@ -6,6 +6,7 @@ saemref:
     {% break %}
     {% endif %}
     {% endfor %}
+    cookie_secret_key: Polichinelle
   db:
     driver: sqlite
     name: /home/saemref/saemref.db

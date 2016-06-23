@@ -1,4 +1,4 @@
-{% from "saemref/map.jinja" import saemref, supervisor_confdir, supervisor_conffile, supervisor_service_name with context %}
+{% from "saemref/map.jinja" import saemref, supervisor_confdir, supervisor_conffile, supervisor_service_name, is_docker_build with context %}
 
 include:
   - saemref.install
@@ -75,7 +75,7 @@ supervisor_confdir:
       - file: supervisor_confdir
 
 supervisor-service-running:
-{% if salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! test -d /run/systemd"') == 0 %}
+{% if is_docker_build %}
 {#
 Salt fail to enable a systemd service if systemd is not running (during the
 docker build phase) This is a workaround.

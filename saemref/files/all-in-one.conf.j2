@@ -85,7 +85,7 @@ cleanup-session-time=1d
 
 # size of the connections pool. Each source supporting multiple connections
 # will have this number of opened connections.
-connections-pool-size=4
+connections-pool-size={{ saemref.instance.pool_size }}
 
 # size of the parsed rql cache size.
 rql-cache-size=3000

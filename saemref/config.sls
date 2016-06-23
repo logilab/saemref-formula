@@ -25,6 +25,11 @@ include:
     - user: {{ saemref.instance.user }}
     - group: {{ saemref.instance.user }}
 
+# HINT: This file is managed by cubicweb package on debian (and missing on centos)
+/etc/logrotate.d/cubicweb-ctl:
+  file.managed:
+    - source: salt://saemref/files/logrotate.conf
+    - template: jinja
 
 CW_MODE=user cubicweb-ctl source-sync --loglevel error {{ saemref.instance.name }}:
   cron.present:

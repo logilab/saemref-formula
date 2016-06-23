@@ -41,22 +41,31 @@ def cli():
 @cli.command(help="Build a container")
 @image_option
 @salt_option
-def build(image, salt):
+@click.option('--tag', default=None, help="Custom tag name for the built docker image")
+@click.option('--file-root', type=click.Path(exists=True), default='test/salt')
+@click.option('--pillar-root', type=click.Path(exists=True), default='test/pillar')
+def build(image, salt, tag, file_root, pillar_root):
     dockerfile = "test/{0}.Dockerfile".format(image)
-    tag = get_tag(image, salt)
     if salt:
         dockerfile_content = open(dockerfile, "rb").read()
         dockerfile_content += (
             b"\n"
             b"ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"
-            b"ADD test/salt /srv/salt\n"
-            b"ADD test/pillar /srv/pillar\n"
-            b"ADD {0} /srv/formula/{0}\n"
+            b"ADD %(file_root)s /srv/salt\n"
+            b"ADD %(pillar_root)s /srv/pillar\n"
+            b"ADD %(formula)s /srv/formula/%(formula)s\n"
             b"RUN salt-call --hard-crash --retcode-passthrough -l debug state.highstate\n"
-        ).format(_formula)
+        ) % {
+            "file_root": file_root,
+            "pillar_root": pillar_root,
+            "formula": _formula,
+        }
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
             fd.write(dockerfile_content)
+
+    if tag is None:
+        tag = get_tag(image, salt)
     subprocess.check_call([
         "docker", "build", "-t", tag, "-f", dockerfile, ".",
     ])

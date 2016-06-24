@@ -20,13 +20,6 @@ cube-packages:
       - pkgrepo: logilab_extranet
     {% endif %}
 
-{% if grains['os_family'] == 'Debian' %}
-# FIXME: https://www.logilab.org/ticket/6302914 workaround
-python-logilab-common:
-  pkg.installed:
-    - version: 1.1.0-1
-{% endif %}
-
 create-saemref-user:
   user.present:
     - name: {{ saemref.instance.user }}

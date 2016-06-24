@@ -16,10 +16,11 @@ saemref:
       wsgi_workers: 2
       wsgi_threads: 8
 
-      # Cookie signing secret key. This parameter is MANDATORY and must be
-      # different accross installations. Generate a strong key using a
-      # generator (for example: pwgen -s 40 -1)
-      cookie_secret_key: SET_ME
+      # Secret keys for encrypting session/cookies data and authentication They
+      # are MANDATORY and should not be the same.
+      session_secret: SETME
+      persistent_secret: SETME2
+      redis_session_secret: SETME3
 
       # Pool size must be equal to wsgi_threads when using wsgi
       pool_size: 8

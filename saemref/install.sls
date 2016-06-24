@@ -12,7 +12,6 @@ cube-packages:
       - cubicweb-ctl
       - cubicweb-server
       - cubicweb-twisted
-    - skip_verify: true {# FIXME: key expired... #}
     - require:
       - pkgrepo: logilab-public-acceptance
     {% else %}{# RedHat #}
@@ -46,7 +45,6 @@ wsgi-packages:
       - {{ redis_name }}
     {% if grains['os_family'] == 'Debian' %}
       - python-pyramid-redis-sessions
-    - skip_verify: true {# FIXME: key expired... #}
     - require:
       - pkgrepo: logilab-backports
       - pkgrepo: backports

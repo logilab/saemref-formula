@@ -10,7 +10,7 @@ wait_saemref_started = pytest.mark.usefixtures("_wait_saemref_started")
 def test_package_saem_ref(Package):
     cube = Package("cubicweb-saem-ref")
     assert cube.is_installed
-    assert cube.version.startswith("0.11.1")
+    assert cube.version.startswith("0.12.0")
 
 
 def test_package_cubicweb(Package, SystemInfo):

@@ -34,4 +34,4 @@
     {% set redis_name = 'redis-server' %}
 {% endif %}
 
-{% set is_docker_build = (salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! test -d /run/systemd"') == 0) %}
+{% set is_docker_build = (salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! (readlink -f /proc/1/exe | grep systemd)"') == 0) %}

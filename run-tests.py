@@ -49,12 +49,12 @@ def build(image, salt, tag, file_root, pillar_root):
     if salt:
         dockerfile_content = open(dockerfile, "rb").read()
         dockerfile_content += (
-            b"\n"
-            b"ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"
-            b"ADD %(file_root)s /srv/salt\n"
-            b"ADD %(pillar_root)s /srv/pillar\n"
-            b"ADD %(formula)s /srv/formula/%(formula)s\n"
-            b"RUN salt-call --hard-crash --retcode-passthrough -l debug state.highstate\n"
+            "\n"
+            "ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"
+            "ADD %(file_root)s /srv/salt\n"
+            "ADD %(pillar_root)s /srv/pillar\n"
+            "ADD %(formula)s /srv/formula/%(formula)s\n"
+            "RUN salt-call --hard-crash --retcode-passthrough -l debug state.highstate\n"
         ) % {
             "file_root": file_root,
             "pillar_root": pillar_root,
@@ -62,7 +62,7 @@ def build(image, salt, tag, file_root, pillar_root):
         }
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
-            fd.write(dockerfile_content)
+            fd.write(dockerfile_content.encode())
 
     if tag is None:
         tag = get_tag(image, salt)

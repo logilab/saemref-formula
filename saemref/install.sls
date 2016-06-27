@@ -3,6 +3,11 @@
 
 include:
   - saemref.logilab-repo
+{% if grains['os_family'] == 'RedHat' %}
+  - epel
+  - postgres.upstream
+{% endif %}
+
 
 cube-packages:
   pkg.latest:
@@ -12,9 +17,11 @@ cube-packages:
       - cubicweb-ctl
       - cubicweb-server
       - cubicweb-twisted
+      - postgresql-client
     - require:
       - pkgrepo: logilab-public-acceptance
     {% else %}{# RedHat #}
+      - postgresql94
     - require:
       - pkgrepo: logilab_extranet
     {% endif %}

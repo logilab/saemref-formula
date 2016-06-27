@@ -28,10 +28,6 @@ logilab-backports:
 
 {% elif grains['os_family'] == 'RedHat' %}
 
-include:
-  - epel
-  - postgres.upstream
-
 logilab_extranet:
   pkgrepo.managed:
     - humanname: Logilab extranet BRDX $releasever $basearch

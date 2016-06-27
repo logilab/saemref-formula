@@ -49,7 +49,7 @@ def cli():
 def build(image, salt, tag, file_root, pillar_root, log_level):
     dockerfile = "test/{0}.Dockerfile".format(image)
     if salt:
-        dockerfile_content = open(dockerfile, "rb").read()
+        dockerfile_content = open(dockerfile, "r").read()
         dockerfile_content += (
             "\n"
             "ADD test/minion.conf /etc/salt/minion.d/minion.conf\n"

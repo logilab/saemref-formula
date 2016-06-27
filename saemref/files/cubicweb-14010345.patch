@@ -1,0 +1,25 @@
+# HG changeset patch
+# User Denis Laxalde <denis.laxalde@logilab.fr>
+# Date 1467029839 -7200
+#      Mon Jun 27 14:17:19 2016 +0200
+# Branch 3.23
+# Node ID dcfc446d8eae9c2ede6da8a752a8fbbc93c8d49d
+# Parent  aaa77d16993a2387ffbeb6375029997c706fc3bf
+Backed out changeset b288debc6736
+
+Only superusers can set lc_messages variable. This prevents connection in many
+cases.
+
+Closes #14010345.
+
+diff --git a/cubicweb/server/sqlutils.py b/cubicweb/server/sqlutils.py
+--- a/cubicweb/server/sqlutils.py
++++ b/cubicweb/server/sqlutils.py
+@@ -584,7 +584,6 @@ sqlite_hooks.append(_init_sqlite_connect
+ def _init_postgres_connection(cnx):
+     """Internal function that will be called to init a postgresql connection"""
+     cnx.cursor().execute('SET TIME ZONE UTC')
+-    cnx.cursor().execute("SET lc_messages to 'C'")
+     # commit is needed, else setting are lost if the connection is first
+     # rolled back
+     cnx.commit()

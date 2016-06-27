@@ -44,7 +44,9 @@ def cli():
 @click.option('--tag', default=None, help="Custom tag name for the built docker image")
 @click.option('--file-root', type=click.Path(exists=True), default='test/salt')
 @click.option('--pillar-root', type=click.Path(exists=True), default='test/pillar')
-def build(image, salt, tag, file_root, pillar_root):
+@click.option('--log-level', type=click.Choice(['debug', 'info', 'warning', 'error']),
+              default='info')
+def build(image, salt, tag, file_root, pillar_root, log_level):
     dockerfile = "test/{0}.Dockerfile".format(image)
     if salt:
         dockerfile_content = open(dockerfile, "rb").read()
@@ -54,11 +56,12 @@ def build(image, salt, tag, file_root, pillar_root):
             "ADD %(file_root)s /srv/salt\n"
             "ADD %(pillar_root)s /srv/pillar\n"
             "ADD %(formula)s /srv/formula/%(formula)s\n"
-            "RUN salt-call --hard-crash --retcode-passthrough -l debug state.highstate\n"
+            "RUN salt-call --hard-crash --retcode-passthrough -l %(log_level)s state.highstate\n"
         ) % {
             "file_root": file_root,
             "pillar_root": pillar_root,
             "formula": _formula,
+            "log_level": log_level,
         }
         dockerfile = os.path.join("test", "{0}_salted.Dockerfile".format(image))
         with open(dockerfile, "wb") as fd:
@@ -80,7 +83,7 @@ def build(image, salt, tag, file_root, pillar_root):
 def test(ctx, image):
     tag = get_tag(image, True)
     if not image_exists(tag):
-        ctx.invoke(build, image=image, salt=True)
+        ctx.invoke(build, image=image, salt=True, log_level='debug')
     postgres_tag = get_tag("postgres", False)
     if not image_exists(tag):
         ctx.invoke(build, image="postgres", salt=False)

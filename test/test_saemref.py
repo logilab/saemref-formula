@@ -7,6 +7,17 @@ wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
 wait_saemref_started = pytest.mark.usefixtures("_wait_saemref_started")
 
 
+def test_package_postgresclient(Package, SystemInfo):
+    if SystemInfo.distribution == "centos":
+        name = "postgresql94"
+    else:  # Debian
+        name = "postgresql-client"
+
+    pkg = Package(name)
+    assert pkg.is_installed
+    assert pkg.version.startswith("9.4")
+
+
 def test_package_saem_ref(Package):
     cube = Package("cubicweb-saem-ref")
     assert cube.is_installed

@@ -26,6 +26,24 @@ cube-packages:
       - pkgrepo: logilab_extranet
     {% endif %}
 
+# Patch CubicWeb 3.23.0 (ticket https://www.cubicweb.org/14010345)
+
+{% if grains['os_family'] == 'RedHat' %}
+{% set sitepkg = 'site-packages' %}
+{% else %}
+{% set sitepkg = 'dist-packages' %}
+{% endif %}
+{% set sqlutils_filepath = ['/usr/lib/python2.7', sitepkg, 'cubicweb/server/sqlutils.py']|join('/') %}
+
+{{ sqlutils_filepath }}:
+  pkg.installed:
+    - name: patch
+  file.patch:
+    - source: salt://saemref/files/cubicweb-14010345.patch
+    - hash: md5=eccc575024e12d1980f799d5abd49776
+    - require:
+      - pkg: cube-packages
+
 create-saemref-user:
   user.present:
     - name: {{ saemref.instance.user }}

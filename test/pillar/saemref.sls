@@ -6,9 +6,9 @@ saemref:
     {% break %}
     {% endif %}
     {% endfor %}
+    sessions_secret: Polichinelle
     authtk_session_secret: Polichinelle1
     authtk_persistent_secret: Polichinelle2
-    redis_session_secret: Polichinelle3
   db:
     driver: sqlite
     name: /home/saemref/saemref.db

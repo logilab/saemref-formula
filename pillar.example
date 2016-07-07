@@ -18,8 +18,8 @@ saemref:
 
       # Secret keys for encrypting session/cookies data and authentication They
       # are MANDATORY and should not be the same.
-      session_secret: SETME
-      persistent_secret: SETME2
+      authtk_session_secret: SETME1
+      authtk_persistent_secret: SETME2
       redis_session_secret: SETME3
 
       # Pool size must be equal to wsgi_threads when using wsgi

@@ -46,17 +46,9 @@ def test_package_cubicweb(Package, SystemInfo):
 def test_idempotence(Salt, state, exclude):
     result = Salt("state.sls", state)
     for item in result.values():
-        assert item["result"] is True
-
+        assert item["result"] is True, item
         if item["name"] in exclude:
             continue
-
-        assert item["changes"] == {}
-
-    # If we run twice, nothing must change
-    result = Salt("state.sls", state)
-    for _, item in result.items():
-        assert item["result"] is True, item
         assert item["changes"] == {}
 
 

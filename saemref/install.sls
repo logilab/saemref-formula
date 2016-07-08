@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-{% from "saemref/map.jinja" import saemref, redis_name, is_docker_build with context %}
+{% from "saemref/map.jinja" import saemref with context %}
 
 include:
   - saemref.logilab-repo
@@ -49,31 +49,14 @@ wsgi-packages:
       - pyramid-cubicweb
       - uwsgi
       - uwsgi-plugin-python
-      - {{ redis_name }}
     {% if grains['os_family'] == 'Debian' %}
-      - python-pyramid-redis-sessions
     - require:
       - pkgrepo: logilab-backports
       - pkgrepo: backports
     {% else %}{# RedHat #}
-      - pyramid_redis_sessions
       - crontabs
     - require:
       - pkgrepo: logilab_extranet
     {% endif %}
-
-redis-server-service-running:
-{% if is_docker_build %}
-{#
-Salt fail to enable a systemd service if systemd is not running (during the
-docker build phase) This is a workaround.
-#}
-  cmd.run:
-    - name: systemctl enable {{ redis_name }}
-{% else %}
-  service.running:
-    - name: {{ redis_name }}
-    - enable: true
-{% endif %}
 
 {% endif %}

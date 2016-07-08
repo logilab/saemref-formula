@@ -56,7 +56,7 @@ def test_idempotence(Salt, state, exclude):
     # If we run twice, nothing must change
     result = Salt("state.sls", state)
     for _, item in result.items():
-        assert item["result"] is True
+        assert item["result"] is True, item
         assert item["changes"] == {}
 
 

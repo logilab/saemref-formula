@@ -26,12 +26,10 @@
         {% set supervisor_conffile = [supervisor_confdir, 'saemref.ini']|join('/') %}
     {% endif %}
     {% set supervisor_service_name = 'supervisord' %}
-    {% set redis_name = 'redis' %}
 {% else %}{# Debian #}
     {% set supervisor_confdir = '/etc/supervisor/conf.d' %}
     {% set supervisor_conffile = [supervisor_confdir, 'saemref.conf']|join('/') %}
     {% set supervisor_service_name = 'supervisor' %}
-    {% set redis_name = 'redis-server' %}
 {% endif %}
 
 {% set is_docker_build = (salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! (readlink -f /proc/1/exe | grep systemd)"') == 0) %}

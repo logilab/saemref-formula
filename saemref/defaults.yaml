@@ -1,4 +1,6 @@
 saemref:
+  install:
+    dev: false
   instance:
     name: saemref
     user: saemref

@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import re
+
 import pytest
 
 wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
@@ -36,27 +38,36 @@ def test_package_cubicweb(Package, SystemInfo):
     assert map(int, cubicweb.version.split('.')) >= [3, 23, 1]
 
 
+@pytest.mark.parametrize("name, version", [
+    ("saem_ref", "0.12.2.dev0"),
+])
+def test_devinstall(Command, name, version):
+    cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"
+    out = Command.check_output(cmd)
+    m = re.search(r'\* {0}( )+{1}'.format(name, version), out)
+    assert m, out
+
+
 @wait_supervisord_started
 @pytest.mark.parametrize("state, exclude", [
-    # FIXME: Contain container IP...
-    ("saemref", ["/home/saemref/etc/cubicweb.d/saemref/all-in-one.conf"]),
-    ("saemref.supervisor", []),
+    ("saemref", [
+        # FIXME: Contain container IP...
+        "/home/saemref/etc/cubicweb.d/saemref/all-in-one.conf",
+        # Has 'ignore_installed: true', so would re-run unconditionally.
+        "cubicweb in venv",
+    ]),
+    ("saemref.supervisor", [
+        # Has 'ignore_installed: true', so would re-run unconditionally.
+        "cubicweb in venv",
+    ]),
 ])
 @pytest.mark.destructive()
 def test_idempotence(Salt, state, exclude):
     result = Salt("state.sls", state)
     for item in result.values():
-        assert item["result"] is True
-
-        if item["name"] in exclude:
-            continue
-
-        assert item["changes"] == {}
-
-    # If we run twice, nothing must change
-    result = Salt("state.sls", state)
-    for _, item in result.items():
         assert item["result"] is True, item
+        if item["__id__"] in exclude:
+            continue
         assert item["changes"] == {}
 
 

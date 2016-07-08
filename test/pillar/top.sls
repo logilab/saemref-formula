@@ -1,3 +1,4 @@
 base:
   '*':
     - saemref
+    - saemref-dev

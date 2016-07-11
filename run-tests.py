@@ -85,7 +85,7 @@ def test(ctx, image):
     if not image_exists(tag):
         ctx.invoke(build, image=image, salt=True, log_level='debug')
     postgres_tag = get_tag("postgres", False)
-    if not image_exists(tag):
+    if not image_exists(postgres_tag):
         ctx.invoke(build, image="postgres", salt=False)
 
     import pytest

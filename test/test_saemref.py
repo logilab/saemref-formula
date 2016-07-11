@@ -39,7 +39,7 @@ def test_package_cubicweb(Package, SystemInfo):
 
 
 @pytest.mark.parametrize("name, version", [
-    ("saem_ref", "0.12.2.dev0"),
+    ("saem_ref", "0.12.2"),
 ])
 def test_devinstall(Command, name, version):
     cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"

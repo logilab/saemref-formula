@@ -23,7 +23,7 @@ def test_package_postgresclient(Package, SystemInfo):
 def test_package_saem_ref(Package):
     cube = Package("cubicweb-saem-ref")
     assert cube.is_installed
-    assert cube.version.startswith("0.12.2")
+    assert cube.version.startswith("0.13.0")
 
 
 def test_package_cubicweb(Package, SystemInfo):
@@ -39,7 +39,7 @@ def test_package_cubicweb(Package, SystemInfo):
 
 
 @pytest.mark.parametrize("name, version", [
-    ("saem_ref", "0.12.2"),
+    ("saem_ref", "0.13.0"),
 ])
 def test_devinstall(Command, name, version):
     cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"

@@ -86,6 +86,14 @@ def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervis
 
     cubicweb = Process.get(ppid=supervisord.pid)
 
+    assert cubicweb.user == "saemref"
+    assert cubicweb.group == "saemref"
+
+    assert Socket("tcp://0.0.0.0:8080").is_listening
+
+    html = Command.check_output("curl http://localhost:8080")
+    assert "<title>accueil (Référentiel SAEM)</title>" in html
+
     if not is_centos6:
         assert cubicweb.comm == "uwsgi"
         # Should have 2 worker process with 8 thread each and 1 http proccess with one thread
@@ -95,13 +103,6 @@ def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervis
         # twisted
         assert cubicweb.comm == "cubicweb-ctl"
 
-    assert cubicweb.user == "saemref"
-    assert cubicweb.group == "saemref"
-
-    assert Socket("tcp://0.0.0.0:8080").is_listening
-
-    html = Command.check_output("curl http://localhost:8080")
-    assert "<title>accueil (Référentiel SAEM)</title>" in html
 
 
 def test_saemref_sync_source_cronjob(Command):

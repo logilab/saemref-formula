@@ -35,7 +35,7 @@ def test_package_cubicweb(Package, SystemInfo):
     cubicweb = Package(name)
     assert cubicweb.is_installed
     assert cubicweb.version.startswith("3.23")
-    assert map(int, cubicweb.version.split('.')) >= [3, 23, 1]
+    assert map(int, cubicweb.version.split('.')) >= [3, 23, 2]
 
 
 @pytest.mark.parametrize("name, version", [

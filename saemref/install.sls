@@ -46,6 +46,16 @@ cubicweb in venv:
     - require:
       - virtualenv: venv
 
+cubicweb-saem_ref:
+  pip.installed:
+    - name: cubicweb-saem_ref
+    - user: {{ saemref.instance.user }}
+    - bin_env: /home/{{ saemref.instance.user }}/venv
+    - require:
+      - pip: cubicweb in venv
+      - user: {{ saemref.instance.user }}
+      - virtualenv: venv
+
 {% if saemref.install.dev %}
 
 dev dependencies:
@@ -60,18 +70,6 @@ cubicweb-saem_ref from hg:
     - bin_env: /home/{{ saemref.instance.user }}/venv
     - require:
       - pkg: dev dependencies
-      - pip: cubicweb in venv
-      - user: {{ saemref.instance.user }}
-      - virtualenv: venv
-
-{% else %}{# Non dev mode #}
-
-cubicweb-saem_ref from pip:
-  pip.installed:
-    - name: cubicweb-saem_ref
-    - user: {{ saemref.instance.user }}
-    - bin_env: /home/{{ saemref.instance.user }}/venv
-    - require:
       - pip: cubicweb in venv
       - user: {{ saemref.instance.user }}
       - virtualenv: venv

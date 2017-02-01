@@ -55,17 +55,13 @@ def test_idempotence(Salt, state, exclude):
 
 
 @wait_saemref_started
-def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervisor_service_name):
+def test_saemref_running(Process, Service, Socket, Command, supervisor_service_name):
     assert Service(supervisor_service_name).is_enabled
 
     supervisord = Process.get(comm="supervisord")
 
-    if is_centos6:
-        assert supervisord.user == "saemref"
-        assert supervisord.group == "saemref"
-    else:
-        assert supervisord.user == "root"
-        assert supervisord.group == "root"
+    assert supervisord.user == "root"
+    assert supervisord.group == "root"
 
     cubicweb = Process.get(ppid=supervisord.pid)
 
@@ -77,15 +73,10 @@ def test_saemref_running(Process, Service, Socket, Command, is_centos6, supervis
     html = Command.check_output("curl http://localhost:8080")
     assert "<title>accueil (Référentiel SAEM)</title>" in html
 
-    if not is_centos6:
-        assert cubicweb.comm == "uwsgi"
-        # Should have 2 worker process with 8 thread each and 1 http proccess with one thread
-        child_threads = sorted([c.nlwp for c in Process.filter(ppid=cubicweb.pid)])
-        assert child_threads == [1, 8, 8]
-    else:
-        # twisted
-        assert cubicweb.comm == "cubicweb-ctl"
-
+    assert cubicweb.comm == "uwsgi"
+    # Should have 2 worker process with 8 thread each and 1 http proccess with one thread
+    child_threads = sorted([c.nlwp for c in Process.filter(ppid=cubicweb.pid)])
+    assert child_threads == [1, 8, 8]
 
 
 def test_saemref_sync_source_cronjob(Command):

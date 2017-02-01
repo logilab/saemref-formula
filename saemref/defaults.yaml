@@ -8,13 +8,8 @@ saemref:
     port:
     anonymous_user:
     anonymous_password:
-    {% if grains['os_family'] == 'RedHat' and grains['osmajorrelease'] == '6' %}
-    wsgi: false
-    pool_size: 4
-    {% else %}
     wsgi: true
     pool_size: 8
-    {% endif %}
     wsgi_threads: 8
     wsgi_workers: 2
   db:

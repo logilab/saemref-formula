@@ -29,7 +29,7 @@ def image_exists(image):
         raise RuntimeError("Cannot test if image exists")
 
 
-image_option = click.argument("image", type=click.Choice(["centos6", "centos7", "jessie"]))
+image_option = click.argument("image", type=click.Choice(["centos7", "jessie"]))
 salt_option = click.option('--salt', is_flag=True, help="Run salt highstate")
 
 

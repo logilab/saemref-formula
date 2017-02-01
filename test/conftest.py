@@ -1,7 +1,8 @@
 import subprocess
+import time
+
 import pytest
 import testinfra
-import time
 
 
 @pytest.fixture
@@ -80,7 +81,8 @@ def pytest_generate_tests(metafunc):
         if not metafunc.config.option.upgrade_revision:
             pytest.skip()
         else:
-            metafunc.parametrize('saem_ref_upgrade_revision', [metafunc.config.option.upgrade_revision])
+            metafunc.parametrize('saem_ref_upgrade_revision',
+                                 [metafunc.config.option.upgrade_revision])
 
 
 @pytest.fixture

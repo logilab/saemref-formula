@@ -55,6 +55,9 @@ cubicweb-saem_ref:
       - pip: cubicweb in venv
       - user: {{ saemref.instance.user }}
       - virtualenv: venv
+  pkg.removed:
+    - pkgs:
+      - cubicweb
 
 {% if saemref.install.dev %}
 

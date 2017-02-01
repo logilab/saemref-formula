@@ -3,7 +3,7 @@ FROM centos:7
 RUN yum -y install epel-release && \
     yum -y install https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el7.noarch.rpm && \
     yum clean expire-cache && \
-    yum -y install salt-minion python-pygit2 git net-tools
+    yum -y install salt-minion python-pygit2 git net-tools libgit2-devel python-devel gcc
 
 
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done) && \

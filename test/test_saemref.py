@@ -24,7 +24,7 @@ def test_pip_packages(PipPackage):
     packages = PipPackage.get_packages(pip_path='/home/saemref/venv/bin/pip')
     assert packages['cubicweb']['version'].startswith("3.24")
     assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 24, 5]
-    assert packages['cubicweb-saem-ref'].startswith("0.14.0")
+    assert packages['cubicweb-saem-ref']['version'].startswith("0.14.0")
 
 
 @pytest.mark.parametrize("name, version", [
@@ -80,5 +80,5 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
 
 
 def test_saemref_sync_source_cronjob(Command):
-    jobs = Command.check_output("crontab -u saemref -l").splitlines()
-    assert '* */1 * * * CW_MODE=user cubicweb-ctl source-sync --loglevel error saemref' in jobs
+    jobs = Command.check_output("crontab -u saemref -l")
+    assert 'cubicweb-ctl source-sync --loglevel error saemref' in jobs

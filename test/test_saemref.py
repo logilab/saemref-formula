@@ -20,22 +20,11 @@ def test_package_postgresclient(Package, SystemInfo):
     assert pkg.version.startswith("9.4")
 
 
-def test_package_saem_ref(Package):
-    cube = Package("cubicweb-saem-ref")
-    assert cube.is_installed
-    assert cube.version.startswith("0.13.1")
-
-
-def test_package_cubicweb(Package, SystemInfo):
-    if SystemInfo.distribution == "centos":
-        name = "cubicweb"
-    else:  # Debian
-        name = "cubicweb-server"
-
-    cubicweb = Package(name)
-    assert cubicweb.is_installed
-    assert cubicweb.version.startswith("3.23")
-    assert map(int, cubicweb.version.split('.')) >= [3, 23, 2]
+def test_pip_packages(PipPackage):
+    packages = PipPackage.get_packages(pip_path='/home/saemref/venv/bin/pip')
+    assert packages['cubicweb']['version'].startswith("3.23")
+    assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 23, 2]
+    assert packages['cubicweb-saem-ref'].startswith("0.13.1")
 
 
 @pytest.mark.parametrize("name, version", [
@@ -53,12 +42,6 @@ def test_devinstall(Command, name, version):
     ("saemref", [
         # FIXME: Contain container IP...
         "/home/saemref/etc/cubicweb.d/saemref/all-in-one.conf",
-        # Has 'ignore_installed: true', so would re-run unconditionally.
-        "cubicweb in venv",
-    ]),
-    ("saemref.supervisor", [
-        # Has 'ignore_installed: true', so would re-run unconditionally.
-        "cubicweb in venv",
     ]),
 ])
 @pytest.mark.destructive()

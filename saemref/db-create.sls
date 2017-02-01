@@ -5,7 +5,7 @@ include:
 
 cubicweb-db-create:
   cmd.run:
-    - name: cubicweb-ctl db-create -a {{ saemref.instance.name }}
+    - name: /home/{{ saemref.instance.user }}/venv/bin/cubicweb-ctl db-create -a {{ saemref.instance.name }}
     - user: {{ saemref.instance.user }}
     - env:
         CW_MODE: user

@@ -31,7 +31,7 @@ include:
     - source: salt://saemref/files/logrotate.conf
     - template: jinja
 
-CW_MODE=user cubicweb-ctl source-sync --loglevel error {{ saemref.instance.name }}:
+CW_MODE=user /home/{{ saemref.instance.user }}/venv/bin/cubicweb-ctl source-sync --loglevel error {{ saemref.instance.name }}:
   cron.present:
     - user: {{ saemref.instance.user }}
     - hour: "*/1"

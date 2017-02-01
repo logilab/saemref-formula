@@ -94,7 +94,6 @@ cubicweb-create:
 wsgi-packages:
   pkg.installed:
     - pkgs:
-      - pyramid-cubicweb
       - uwsgi
       - uwsgi-plugin-python
     {% if grains['os_family'] == 'Debian' %}

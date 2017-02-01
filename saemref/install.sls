@@ -76,6 +76,16 @@ cubicweb-saem_ref from hg:
 
 {% endif %}
 
+{% if saemref.instance.test_mode -%}
+{% for fname in ['languages.csv', 'mime_types.csv'] %}
+{{ ['/home', saemref.instance.user, 'venv', 'share', 'cubicweb', 'cubes', 'seda', 'migration', 'data', fname]|join('/') }}:
+  file.managed:
+    - source: salt://saemref/files/test/{{ fname }}
+    - user: {{ saemref.instance.user }}
+    - show_changes: false
+{% endfor %}
+{%- endif %}
+
 cubicweb-create:
   cmd.run:
     - name: /home/{{ saemref.instance.user }}/venv/bin/cubicweb-ctl create --no-db-create -a saem_ref {{ saemref.instance.name }}

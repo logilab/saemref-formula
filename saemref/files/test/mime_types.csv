@@ -1,0 +1,6 @@
+#;$id;label;alt label;
+type;url;string;string;
+lang;;seda-2;en;
+url;skos:Concept;skos:prefLabel;skos:prefLabel;
+;;application/1d-interleaved-parityfec;1d-interleaved-parityfec
+;;application/3gpp-ims+xml;3gpp-ims+xml

@@ -1,5 +1,6 @@
 saemref:
   instance:
+    test_mode: true
     {% for ip in grains['ipv4'] -%}
     {% if ip != '127.0.0.1' -%}
     base_url: http://{{ ip }}:8080

@@ -134,6 +134,12 @@ logstat-interval=0
 logstat-file=/tmp/{{ saemref.instance.name }}-all-in-one.stats
 
 
+[OAIPMH]
+
+# the e-mail address of an administrator of the OAI-PMH repository
+#admin-email=
+
+
 [WEB]
 
 # http server port number (default to 8080)
@@ -186,25 +192,21 @@ http-session-time=0
 # to 5min.
 cleanup-anonymous-session-time=5min
 
-# regular expression matching URLs that may be embeded. leave it blank if you
-# don't want the embedding feature, or set it to ".*" if you want to allow
-# everything
-#embed-allowed=
-
 # Mail used as recipient to report bug in this instance, if you want this
 # feature on
 #submit-mail=
 
-# use Accept-Language http header to try to set user interface's language
-# according to browser defined preferences
-language-negociation=yes
+# source for interface's language detection. If set to "http-negotiation" the
+# Accept-Language HTTP header will be used, if set to "url-prefix", the URL
+# will be inspected for a short language prefix.
+language-mode=http-negotiation
 
 # print the traceback on the error page when an error occurred
 print-traceback=yes
 
 # True type font to use for captcha image generation (you must have the python
 # imaging library installed to use captcha)
-captcha-font-file=/usr/share/cubicweb/cubes/shared/data/porkys.ttf
+captcha-font-file=/home/{{ saemref.instance.user }}/venv/share/cubicweb/cubes/shared/data/porkys.ttf
 
 # Font size to use for captcha image generation (you must have the python
 # imaging library installed to use captcha)

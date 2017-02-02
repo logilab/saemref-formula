@@ -7,6 +7,17 @@ include:
   - postgres.upstream
 {% endif %}
 
+pip-setuptools:
+  pkg.latest:
+    - pkgs:
+    {% if grains['os_family'] == 'Debian' %}
+      - python-pip
+    {% else %}{# RedHat #}
+      - python2-pip
+    {% endif %}
+  pip.installed:
+    - name: setuptools
+    - ignore_installed: true
 
 cube-packages:
   pkg.latest:
@@ -14,13 +25,11 @@ cube-packages:
     {% if grains['os_family'] == 'Debian' %}
       - postgresql-client
       - graphviz
-      - python-pip
       - python-all-dev
       - libgecode-dev
     {% else %}{# RedHat #}
       - postgresql94
       - graphviz-gd
-      - python2-pip
       - python-devel
       - gecode-devel
     {% endif %}
@@ -28,9 +37,8 @@ cube-packages:
       - python-virtualenv
       - python-lxml
       - python-psycopg2
-  pip.installed:
-    - name: setuptools
-    - ignore_installed: true
+    - required:
+      - pip: pip-setuptools
 
 create-saemref-user:
   user.present:

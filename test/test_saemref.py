@@ -42,6 +42,8 @@ def test_devinstall(Command, name, version):
     ("saemref", [
         # FIXME: Contain container IP...
         "/home/saemref/etc/cubicweb.d/saemref/all-in-one.conf",
+        # Has 'ignore_installed: true', so would re-run unconditionally.
+        "pip-setuptools",
     ]),
 ])
 @pytest.mark.destructive()

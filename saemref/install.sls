@@ -27,11 +27,13 @@ cube-packages:
       - graphviz
       - python-all-dev
       - libgecode-dev
+      - g++
     {% else %}{# RedHat #}
       - postgresql94
       - graphviz-gd
       - python-devel
       - gecode-devel
+      - gcc-c++
     {% endif %}
       - gettext
       - python-virtualenv

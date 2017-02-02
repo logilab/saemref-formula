@@ -15,10 +15,14 @@ cube-packages:
       - postgresql-client
       - graphviz
       - python-pip
+      - python-all-dev
+      - libgecode-dev
     {% else %}{# RedHat #}
       - postgresql94
       - graphviz-gd
       - python2-pip
+      - python-devel
+      - gecode-devel
     {% endif %}
       - gettext
       - python-virtualenv

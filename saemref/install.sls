@@ -36,11 +36,28 @@ create-saemref-user:
   user.present:
     - name: {{ saemref.instance.user }}
 
+legacy cleanup:
+  pkg.removed:
+    - pkgs:
+      - cubicweb-saem-ref
+      - cubicweb
+      - python-logilab-common
+      - python-logilab-mtconverter
+      - python-rql
+      - python-yams
+      - python-logilab-database
+      - python-passlib
+      - python-twisted-web
+      - python-markdown
+      - pytz
+
 venv:
   virtualenv.managed:
     - name: /home/{{ saemref.instance.user }}/venv
     - system_site_packages: true
     - user: {{ saemref.instance.user }}
+    - require:
+      - pkg: legacy cleanup
 
 cubicweb in venv:
   pip.installed:
@@ -59,9 +76,6 @@ cubicweb-saem_ref:
       - pip: cubicweb in venv
       - user: {{ saemref.instance.user }}
       - virtualenv: venv
-  pkg.removed:
-    - pkgs:
-      - cubicweb
 
 {% if saemref.install.dev %}
 

@@ -10,6 +10,8 @@ saemref:
     sessions_secret: Polichinelle
     authtk_session_secret: Polichinelle1
     authtk_persistent_secret: Polichinelle2
+    anonymous_user: anon
+    anonymous_password: anon
   db:
     driver: sqlite
     name: /home/saemref/saemref.db

@@ -1,9 +1,14 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+from os import path
 import re
 
 import pytest
+
+
+DATA_DIR = path.join(path.abspath(path.dirname(__file__)), "data")
+
 
 wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
 wait_saemref_started = pytest.mark.usefixtures("_wait_saemref_started")
@@ -84,3 +89,50 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
 def test_saemref_sync_source_cronjob(Command):
     jobs = Command.check_output("crontab -u saemref -l")
     assert 'cubicweb-ctl source-sync --loglevel error saemref' in jobs
+
+
+@wait_saemref_started
+@pytest.mark.docker_addopts("-v", "{0}:/data".format(DATA_DIR))
+@pytest.mark.destructive
+def test_saemref_client(Command):
+    # execute c-c shell file to create NAA, organization and user
+    output = cc_shell(Command, 'configure_instance.py')
+    # retrieve the generated secret token
+    token_secret = output.splitlines()[-1]
+    # and generate file containing authentication information
+    output = Command.check_output(
+        '''cat <<EOF > cubicweb.yaml
+id: token-user
+secret: {}
+EOF'''.format(token_secret))
+
+    # test skos-download command
+    output = Command.check_output(
+        'python -m saemref_client skos-download -v http://localhost:8080 '
+        '25651/v1 -o /tmp/skos-download/')
+    folder_content = Command.check_output('ls /tmp/skos-download/25651-v1/*.xml')
+    assert folder_content, \
+        '{}\n\nFolder content: {}'.format(output, folder_content)
+
+    # test eac-upload command
+    output = Command.check_output(
+        'python -m saemref_client eac-upload http://localhost:8080 '
+        '/data/eac.xml')
+    assert 'ark' in output
+
+    # eac-download command
+    cc_shell(Command, 'publish_authority_records.py')
+    Command.check_output('mkdir /tmp/eac-download/')
+    output = Command.check_output(
+        'python -m saemref_client eac-download http://localhost:8080 '
+        ' -o /tmp/eac-download/')
+    folder_content = Command.check_output('ls /tmp/eac-download/*.xml')
+    assert folder_content, \
+        '{}\n\nFolder content: {}'.format(output, folder_content)
+
+
+def cc_shell(Command, script_name):
+    return Command.check_output(
+        'CW_INSTANCES_DIR=/home/saemref/etc/cubicweb.d '
+        '/home/saemref/venv/bin/cubicweb-ctl shell saemref '
+        '/data/%s', script_name)

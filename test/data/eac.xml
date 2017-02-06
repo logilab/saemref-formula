@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ead PUBLIC "+//ISBN 1-931666-00-8//DTD ead.dtd (Encoded Archival Description (EAD) Version 2002)//EN" "ead.dtd">
+<eac-cpf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:isbn:1-931666-33-4 http://eac.staatsbibliothek-berlin.de/schema/cpf.xsd"
+  xmlns="urn:isbn:1-931666-33-4"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <control>
+    <recordId>FRAD033_EAC_00001</recordId>
+    <otherRecordId>1234</otherRecordId>
+    <otherRecordId localType="letters">ABCD</otherRecordId>
+
+    <maintenanceStatus>new</maintenanceStatus>
+
+    <publicationStatus>approved</publicationStatus>
+
+    <maintenanceAgency>
+      <agencyCode>FR-AD033</agencyCode>
+      <!-- Problème dans les identifiants des services d'archives : l'EAC-CPF ne prend que la forme FR-ADXXX -->
+      <agencyName>Gironde. Archives départementales</agencyName>
+    </maintenanceAgency>
+    <languageDeclaration>
+      <language languageCode="fre">français</language>
+      <script scriptCode="Latn">latin</script>
+    </languageDeclaration>
+    <conventionDeclaration>
+      <!-- Problème d'export d'ICA-AtoM : en principe, chaque référence à une norme doit être encodée dans un élément conventionDeclaration distinct. -->
+      <abbreviation>ISAAR(CPF)</abbreviation>
+      <citation xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.ica.org"
+        xlink:type="simple"/>
+      <!-- Dans le futur profil européen de l'EAC-CPF, l'élément <citation> n'est à utiliser que pour les liens -->
+      <descriptiveNote>
+        <p>Norme ISAAR(CPF) du Conseil international des archives, 2e édition, 1996.</p>
+      </descriptiveNote>
+    </conventionDeclaration>
+    <conventionDeclaration>
+      <abbreviation/>
+      <citation xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="" xlink:type="simple"/>
+      <!-- Dans le futur profil européen de l'EAC-CPF, l'élément <citation> n'est à utiliser que pour les liens -->
+      <descriptiveNote>
+        <p>AFNOR NF Z 44-060, octobre 1983, Catalogue d’auteurs et d’anonymes : forme et
+          structure des vedettes des collectivités auteurs.</p>
+      </descriptiveNote>
+    </conventionDeclaration>
+    <conventionDeclaration>
+      <abbreviation/>
+      <citation xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="" xlink:type="simple"/>
+      <!-- Dans le futur profil européen de l'EAC-CPF, l'élément <citation> n'est à utiliser que pour les liens -->
+      <descriptiveNote>
+        <p>Norme ISO 8601 :2004 Éléments de données et formats d’échange -- Échange
+          d’information -- Représentation de la date et de l’heure.</p>
+      </descriptiveNote>
+    </conventionDeclaration>
+    
+    <localControl localType="detailLevel">
+
+      <term>Complet</term>
+
+    </localControl>
+    <maintenanceHistory>
+      <maintenanceEvent>
+        <eventType>created</eventType>
+        <eventDateTime standardDateTime="2013-04-24T05:34:41">24 avril 2013 05:34:41 PDT</eventDateTime>
+        <agentType>human</agentType><agent/>
+        <eventDescription>bla bla</eventDescription>
+      </maintenanceEvent>
+    <maintenanceEvent>
+      <eventType>revised</eventType>
+      <eventDateTime standardDateTime="2015-01-15T07:16:33">15 janvier 2015 07:16:33 PST</eventDateTime>
+      <agentType>human</agentType>
+      <agent>Delphine Jamet</agent>
+    </maintenanceEvent>
+    </maintenanceHistory>
+
+    <sources>
+
+      <source>
+        <!--empty source-->
+        <sourceEntry></sourceEntry>
+      </source>
+
+      <source>
+
+        <sourceEntry>1. Ouvrages imprimés...</sourceEntry>
+        <descriptiveNote>des bouquins</descriptiveNote>
+
+      </source>
+
+      <source xmlns:xlink="http://www.w3.org/1999/xlink"
+          xlink:href="http://archives.gironde.fr" xlink:type="simple"
+          xlink:show="new" xlink:actuate="onRequest">
+          <sourceEntry>Site des Archives départementales de la Gironde</sourceEntry>
+      </source>
+
+    </sources>
+
+  </control>
+
+  <cpfDescription>
+
+    <identity>
+
+      <entityId>22330001300016</entityId>
+
+      <entityType>corporateBody</entityType>
+
+      <nameEntry>
+
+        <part>Gironde</part>
+        <part>Conseil général</part>
+
+        <authorizedForm>conventionDeclaration</authorizedForm>
+
+      </nameEntry>
+
+      <nameEntry>
+
+          <part>CG33</part>
+
+          <alternativeForm>conventionDeclaration</alternativeForm>
+
+      </nameEntry>
+
+    </identity>
+
+    <description>
+      <existDates><dateRange><fromDate>1800</fromDate><toDate>2099</toDate></dateRange>
+      </existDates>
+      <place>
+          <placeRole>siege</placeRole>
+          <placeEntry vocabularySource="http://catalogue.bnf.fr/ark:/12148/cb152418385">Bordeaux (Gironde, France)</placeEntry>
+          <address>
+              <addressLine localType="StreetName">1 Esplanade Charles de Gaulle</addressLine>
+              <addressLine localType="PostCode">33074</addressLine>
+              <addressLine localType="CityName"> Bordeaux Cedex</addressLine>
+         </address>
+        <!-- L'élément <placeEntry> est un élément d'indexation. Il y a un problème dans l'export ICA-AtoM : les informations textuelles doivent être contenues dans <descriptiveNote> -->
+      </place>
+      <place>
+          <placeRole>domicile</placeRole>
+          <placeEntry>Toulouse (France)</placeEntry>
+      </place>
+      <places>
+          <place>
+              <placeRole>dodo</placeRole>
+              <placeEntry>Lit</placeEntry>
+          </place>
+      </places>
+      <legalStatus>
+
+        <term>Collectivité territoriale</term>
+        <dateRange>
+            <fromDate standardDate="1234">The mystic year!</fromDate>
+            <toDate>3000</toDate>
+        </dateRange>
+        <descriptiveNote>Description du statut</descriptiveNote>
+      </legalStatus>
+
+      <function>
+
+          <descriptiveNote><p>Quatre grands domaines de compétence...</p></descriptiveNote>
+      </function>
+      <function> <term vocabularySource="http://data.culture.fr/thesaurus/page/ark:/67717/T1-200"
+        >action sociale</term> 
+          <descriptiveNote> <p>1. Solidarité
+            blablabla.</p></descriptiveNote>
+      </function>
+      <function><term vocabularySource="http://data.culture.fr/thesaurus/page/ark:/67717/T1-1074">environnement</term></function>
+
+      <mandate>
+          <term>1. Constitutions françaises</term>
+          <descriptiveNote>Description du mandat</descriptiveNote>
+      </mandate>
+
+      <occupations>
+        <occupation>
+          <term vocabularySource="http://pifgadget.com">Réunioniste</term>
+          <dateRange>
+              <fromDate>1987</fromDate>
+              <toDate>2099</toDate>
+          </dateRange>
+          <descriptiveNote>Organisation des réunions ...</descriptiveNote>
+          <citation>la bible</citation>
+        </occupation>
+      </occupations>
+
+      <structureOrGenealogy><p>Pour accomplir ses missions ...</p></structureOrGenealogy>
+
+      <!--empty structureOrGenealogy-->
+      <structureOrGenealogy></structureOrGenealogy>
+
+      <generalContext>
+          <p>very famous</p>
+          <citation>it's well known</citation>
+      </generalContext>
+
+      <biogHist>
+          <p>La loi du 22 décembre 1789, en divisant ...</p>
+          <p>L&#39;inspecteur Canardo</p>
+          <citation xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.assemblee-nationale.fr/histoire/images-decentralisation/decentralisation/loi-du-22-decembre-1789-.pdf" xlink:type="simple"></citation>
+          <citation xlink:href="http://pifgadget">Voir aussi pifgadget</citation>
+      </biogHist>
+
+      <!--empty biogHist-->
+      <biogHist></biogHist>
+
+    </description>
+
+    <relations>
+
+      <cpfRelation cpfRelationType="hierarchical" xlink:href="CG33-DIRADSJ" xlink:type="simple">
+          <relationEntry>Gironde. Conseil général. Direction de l'administration et de la sécurité juridique</relationEntry>
+          <dateRange>
+              <fromDate standardDate="2008">2008</fromDate>
+              <toDate standardDate="2099">2099</toDate>
+          </dateRange>
+          <descriptiveNote>Coucou</descriptiveNote>
+      </cpfRelation>
+
+      <cpfRelation cpfRelationType="temporal-earlier" xlink:href="whatever" xlink:type="simple">
+          <relationEntry>CG32</relationEntry>
+          <dateRange>
+              <fromDate standardDate="1917">1917</fromDate>
+              <toDate standardDate="2009">2009</toDate>
+          </dateRange>
+      </cpfRelation>
+
+      <cpfRelation cpfRelationType="temporal-later" xlink:href="/dev/null" xlink:type="simple">
+          <relationEntry>Trash</relationEntry>
+          <dateRange>
+              <fromDate standardDate="2042">2042</fromDate>
+          </dateRange>
+          <objectXMLWrap><gloups>hips</gloups></objectXMLWrap>
+      </cpfRelation>
+
+      <cpfRelation cpfRelationType="associative" xlink:href="agent-x" xlink:type="simple"></cpfRelation>
+
+      <resourceRelation resourceRelationType="creatorOf"
+        xmlns:xlink="http://www.w3.org/1999/xlink" 
+        xlink:href="http://gael.gironde.fr/ead.html?id=FRAD033_IR_N" xlink:type="simple" xlink:role="Fonds d'archives" xlink:show="new" xlink:actuate="onRequest">
+        <objectXMLWrap><he>joe</he></objectXMLWrap>
+        <dateRange>
+          <fromDate>1673</fromDate>
+          <toDate>1963</toDate>
+        </dateRange>
+      </resourceRelation>
+      
+      
+    </relations>
+
+  </cpfDescription>
+
+</eac-cpf>

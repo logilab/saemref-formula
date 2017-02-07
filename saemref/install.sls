@@ -39,7 +39,7 @@ cube-packages:
       - python-virtualenv
       - python-lxml
       - python-psycopg2
-    - required:
+    - require:
       - pip: pip-setuptools
 
 create-saemref-user:

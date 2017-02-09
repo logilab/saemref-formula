@@ -86,6 +86,8 @@ def test_pillars(File, Salt, SystemInfo):
             'base_url': base_url,
             'pool_size': 8,
             'port': 8080,
+            'oai_port': 8081,
+            'oai_threads': 8,
             'sessions_secret': 'Polichinelle',
             'test_mode': True,
             'user': 'saemref',
@@ -122,15 +124,16 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
     assert supervisord.user == "root"
     assert supervisord.group == "root"
 
-    cubicweb = Process.get(ppid=supervisord.pid)
-    assert cubicweb.comm == "gunicorn"
-    assert cubicweb.user == "saemref"
-    assert cubicweb.group == "saemref"
+    childs = Process.filter(ppid=supervisord.pid)
+    assert [(c.comm, c.user, c.group) for c in childs] == 2 * [("gunicorn", "saemref", "saemref")]
 
     assert Socket("tcp://0.0.0.0:8080").is_listening
+    assert Socket("tcp://0.0.0.0:8081").is_listening
 
     html = Command.check_output("curl http://localhost:8080")
     assert "<title>accueil (Référentiel SAEM)</title>" in html
+    xml = Command.check_output("curl http://localhost:8081/oai")
+    assert xml.startswith("<?xml ")
 
 
 def test_saemref_sync_source_cronjob(Command):

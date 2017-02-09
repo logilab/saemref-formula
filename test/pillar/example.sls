@@ -5,6 +5,8 @@ saemref:
       user: saemref
       # http port
       port: 8080
+      oai_port: 8081
+      oai_threads: 8
       # Anonymous user
       anonymous_user: "john"
       anonymous_password: "secret"

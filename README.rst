@@ -7,6 +7,12 @@ saemref-formula
 
 A saltstack formula handling installation of `saem_ref`_.
 
+The formula will run two web application server, one dedicated to OAIPMH
+request to serve ``/oai`` on port 8081 and one for other requests on port 8080.
+
+To use them in a single port you may configure a reverse proxy, such as apache2
+or nginx, on front of the instances.
+
 Available states
 ================
 

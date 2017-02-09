@@ -10,7 +10,6 @@ include:
     - template: jinja
 {% endfor %}
 
-{% if saemref.instance.wsgi %}
 /home/{{ saemref.instance.user }}/etc/cubicweb.d/{{ saemref.instance.name }}/pyramid.ini:
   file.managed:
     - source: salt://saemref/files/pyramid.ini
@@ -18,6 +17,7 @@ include:
     - user: {{ saemref.instance.user }}
     - group: {{ saemref.instance.user }}
 
+{% if saemref.instance.wsgi %}
 /home/{{ saemref.instance.user }}/etc/cubicweb.d/{{ saemref.instance.name }}/uwsgi.ini:
   file.managed:
     - source: salt://saemref/files/uwsgi.ini

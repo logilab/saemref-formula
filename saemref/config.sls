@@ -18,12 +18,9 @@ include:
     - group: {{ saemref.instance.user }}
 
 {% if saemref.instance.wsgi %}
+# remove legacy config file
 /home/{{ saemref.instance.user }}/etc/cubicweb.d/{{ saemref.instance.name }}/uwsgi.ini:
-  file.managed:
-    - source: salt://saemref/files/uwsgi.ini
-    - template: jinja
-    - user: {{ saemref.instance.user }}
-    - group: {{ saemref.instance.user }}
+  file.absent
 
 # HINT: This file is managed by cubicweb package on debian (and missing on centos)
 /etc/logrotate.d/cubicweb-ctl:

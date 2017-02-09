@@ -71,7 +71,7 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
     assert supervisord.group == "root"
 
     cubicweb = Process.get(ppid=supervisord.pid)
-
+    assert cubicweb.comm == "gunicorn"
     assert cubicweb.user == "saemref"
     assert cubicweb.group == "saemref"
 
@@ -79,11 +79,6 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
 
     html = Command.check_output("curl http://localhost:8080")
     assert "<title>accueil (Référentiel SAEM)</title>" in html
-
-    assert cubicweb.comm == "uwsgi"
-    # Should have 2 worker process with 8 thread each and 1 http proccess with one thread
-    child_threads = sorted([c.nlwp for c in Process.filter(ppid=cubicweb.pid)])
-    assert child_threads == [1, 8, 8]
 
 
 def test_saemref_sync_source_cronjob(Command):

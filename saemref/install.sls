@@ -60,6 +60,8 @@ legacy cleanup:
       - python-twisted-web
       - python-markdown
       - pytz
+      - uwsgi
+      - uwsgi-plugin-python
 
 venv:
   virtualenv.managed:
@@ -130,16 +132,19 @@ cubicweb-create:
 
 {% if saemref.instance.wsgi %}
 
-wsgi-packages:
-  pkg.installed:
+gunicorn in venv:
+  pip.installed:
     - pkgs:
-      - uwsgi
-      - uwsgi-plugin-python
-    {% if grains['os_family'] == 'Debian' %}
+      - gunicorn
+      - futures
+    - bin_env: /home/{{ saemref.instance.user }}/venv
+    - user: {{ saemref.instance.user }}
     - require:
-      - pkgrepo: backports
-    {% else %}{# RedHat #}
-      - crontabs
-    {% endif %}
+      - virtualenv: venv
 
+{% if grains['os_family'] == 'RedHat' %}
+crontabs installed:
+  pkg.installed:
+    - name: crontabs
+{% endif %}
 {% endif %}

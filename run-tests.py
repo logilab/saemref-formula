@@ -9,6 +9,10 @@ BASEDIR = os.path.abspath(os.path.dirname(__file__))
 _formula = "saemref"
 
 
+def get_http_proxy():
+    return os.environ.get('HTTP_PROXY', os.environ.get('http_proxy'))
+
+
 def get_tag(image, salt=False):
     tag = "{0}-formula:{1}".format(_formula, image)
     if salt:
@@ -69,9 +73,12 @@ def build(image, salt, tag, file_root, pillar_root, log_level):
 
     if tag is None:
         tag = get_tag(image, salt)
-    subprocess.check_call([
-        "docker", "build", "-t", tag, "-f", dockerfile, ".",
-    ])
+    args = ["docker", "build"]
+    http_proxy = get_http_proxy()
+    if http_proxy:
+        args.extend(["--build-arg", "http_proxy={0}".format(http_proxy)])
+    args.extend(["-t", tag, "-f", dockerfile, "."])
+    subprocess.check_call(args)
 
 
 @cli.command(
@@ -107,7 +114,9 @@ def dev(ctx, image, salt):
         "-v", "{0}/test/pillar:/srv/pillar".format(BASEDIR),
         "-v", "{0}/{1}:/srv/formula/{1}".format(BASEDIR, _formula),
     ]
-
+    http_proxy = get_http_proxy()
+    if http_proxy:
+        cmd.extend(["--env", "http_proxy={0}".format(http_proxy)])
     if image in ("centos7", "jessie"):
         # Systemd require privileged container
         cmd.append("--privileged")

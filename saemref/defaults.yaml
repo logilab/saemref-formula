@@ -5,7 +5,7 @@ saemref:
     name: saemref
     user: saemref
     base_url:
-    port:
+    port: 8080
     anonymous_user:
     anonymous_password:
     wsgi: true

@@ -1,6 +1,8 @@
 {% import_yaml 'saemref/defaults.yaml' as default_settings %}
 
-{% set os_family_map = salt['grains.filter_by']({
+{% set saemref = salt['pillar.get'](
+    'saemref',
+    default=salt['grains.filter_by']({
         'Debian': {
             'supervisor_conffile': '/etc/supervisor/conf.d/saemref.conf',
             'supervisor_service_name': 'supervisor',
@@ -9,18 +11,9 @@
             'supervisor_conffile': '/etc/supervisord.d/saemref.ini',
             'supervisor_service_name': 'supervisord',
         },
-  },
-  grain="os_family",
-  merge=salt['pillar.get']('saemref:lookup'))
-%}
-
-{% do default_settings.saemref.update(os_family_map) %}
-
-{% set saemref = salt['pillar.get'](
-        'saemref',
-        default=default_settings.saemref,
-        merge=True,
-    )
+        'base': default_settings.saemref,
+    }, grain='os_family', base='base', merge=salt['pillar.get']('saemref:lookup')),
+    merge=True)
 %}
 
 {% set is_docker_build = (salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! (readlink -f /proc/1/exe | grep systemd)"') == 0) %}

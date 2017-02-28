@@ -1,3 +1,4 @@
 saemref:
-  install:
-    dev: true
+  lookup:
+    install:
+      dev: true

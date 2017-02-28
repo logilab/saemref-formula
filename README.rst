@@ -29,7 +29,7 @@ Cubicweb config files are located in ``~saemref/etc/cubicweb.d/saemref`` and
 ``CW_MODE=user``.
 
 The state require the installation of `epel-formula`_ and `postgres-formula`_
-with ``postgres.lookup.version: 9.4`` (see ``pillar.example``).
+with version 9.4 (see ``pillar.example``).
 
 ``saemref.config``
 ------------------

@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import json
 from os import path
 import re
 
@@ -59,6 +60,57 @@ def test_idempotence(Salt, state, exclude):
         if item["__id__"] in exclude:
             continue
         assert item["changes"] == {}
+
+
+def test_pillars(File, Salt, SystemInfo):
+    base_url = Salt("pillar.get", "saemref:lookup:instance:base_url")
+    assert base_url.startswith('http://')
+    assert base_url.endswith(':8080')
+    pillars = Salt("pillar.items")
+    expected = {
+        'admin': {'login': 'admin', 'pass': 'admin'},
+        'db': {
+            'driver': 'sqlite',
+            'host': '',
+            'name': '/home/saemref/saemref.db',
+            'pass': 'saemref',
+            'port': '',
+            'user': 'saemref'},
+        'install': {'dev': True},
+        'instance': {
+            'anonymous_password': 'anon',
+            'anonymous_user': 'anon',
+            'authtk_persistent_secret': 'Polichinelle2',
+            'authtk_session_secret': 'Polichinelle1',
+            'name': 'saemref',
+            'base_url': base_url,
+            'pool_size': 8,
+            'port': 8080,
+            'sessions_secret': 'Polichinelle',
+            'test_mode': True,
+            'user': 'saemref',
+            'wsgi': True,
+            'wsgi_threads': 8,
+            'wsgi_workers': 2,
+        }
+    }
+    assert pillars == {
+        'postgres': {'version': 9.4},
+        'saemref': {'lookup': expected}
+    }
+    Salt("state.sls", "test_pillar")
+    # /tmp/formula_pillars.json should be written by test_pillar state
+    pillars = json.loads(File("/tmp/formula_pillars.json").content)
+    pillars.pop('lookup')
+    if SystemInfo.distribution == "centos":
+        expected.update(
+            supervisor_conffile='/etc/supervisord.d/saemref.ini',
+            supervisor_service_name='supervisord')
+    else:  # Debian
+        expected.update(
+            supervisor_conffile='/etc/supervisor/conf.d/saemref.conf',
+            supervisor_service_name='supervisor')
+    assert pillars == expected
 
 
 @wait_saemref_started

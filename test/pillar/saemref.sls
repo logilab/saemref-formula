@@ -16,6 +16,3 @@ saemref:
     db:
       driver: sqlite
       name: /home/saemref/saemref.db
-
-postgres:
-  version: 9.4

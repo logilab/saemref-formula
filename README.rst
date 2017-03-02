@@ -47,6 +47,8 @@ Only manage instance configuration files.
 
 Create instance database with ``cubicweb-ctl db-create`` (call implicitly ``db-init``).
 
+WARNING: this will destroy existing database if exists.
+
 ``saemref.db-init``
 ---------------------
 
@@ -68,6 +70,47 @@ Requirements
 If using postgres as database driver, ensure the `postgres contrib`_ package is
 installed on server side.
 
+Recomended usage
+================
+
+Given target minion_id is 'srv'.
+
+/srv/salt/top.sls::
+
+    base:
+        'srv':
+            - saemref
+            - saemref.supervisor
+
+
+/srv/pillar/top.sls::
+
+    base:
+        'srv':
+            - saemref
+
+
+/srv/pillar/saemref.sls: see `pillar.example <test/pillar/example.sls>`_
+
+
+Example of reverse proxy configuration for nginx::
+
+    server {
+        listen 80;
+        server_name saemref.example.com;
+        location / {
+            proxy_pass http://srv:8080;
+        }
+        location /oai {
+            proxy_pass http://srv:8081;
+        }
+    }
+
+
+For the first installation run ``salt srv state.sls db-create`` to create
+the database (WARNING: this will destroy existing database if exists).
+
+Then run: ``salt srv state.highstate`` to finish the installation.
 
 Testing
 =======

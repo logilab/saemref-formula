@@ -8,8 +8,8 @@ saemref:
       oai_port: 8081
       oai_threads: 8
       # Anonymous user
-      anonymous_user: "john"
-      anonymous_password: "secret"
+      anonymous_user: anon
+      anonymous_password: anon
 
       # wsgi settings
       # 2 * 8 = can handle 16 concurrent request

@@ -120,7 +120,7 @@ cubicweb-saem_ref from hg:
 
 {% if saemref.instance.test_mode -%}
 {% for fname in ['languages.csv', 'mime_types.csv'] %}
-{{ ['/home', saemref.instance.user, 'venv', 'share', 'cubicweb', 'cubes', 'seda', 'migration', 'data', fname]|join('/') }}:
+{{ ['/home', saemref.instance.user, 'venv', 'lib', 'python2.7', 'site-packages', 'cubicweb_seda', 'migration', 'data', fname]|join('/') }}:
   file.managed:
     - source: salt://saemref/files/test/{{ fname }}
     - user: {{ saemref.instance.user }}

@@ -125,6 +125,8 @@ cubicweb-saem_ref from hg:
     - source: salt://saemref/files/test/{{ fname }}
     - user: {{ saemref.instance.user }}
     - show_changes: false
+    - require:
+      - pip: cubicweb-saem_ref
 {% endfor %}
 {%- endif %}
 

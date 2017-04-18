@@ -142,11 +142,11 @@ the container with ``salt-call``).
 The command ``./run-test.py dev centos7 --salt`` is the same as above but will
 provision the container (eg. calling ``salt-call state.highstate``)
 
-The command ``./run-test.py test centos7`` built a provisioned image
+The command ``./run-test.py test centos7 -- test`` built a provisioned image
 (highstate) and run testinfra tests on it.
 
 Note that you can add any parameters that testinfra (pytest) accept, for
-instance ``./run-test.py test centos7 -- -k idempotence --pdb``.
+instance ``./run-test.py test centos7 -- -k idempotence --pdb test``.
 
 
 Testing migration

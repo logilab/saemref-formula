@@ -130,8 +130,8 @@ def test_saemref_running(Process, Service, Socket, Command, supervisor_service_n
     assert Socket("tcp://0.0.0.0:8080").is_listening
     assert Socket("tcp://0.0.0.0:8081").is_listening
 
-    html = Command.check_output("curl http://localhost:8080")
-    assert "<title>accueil (Référentiel SAEM)</title>" in html
+    html = Command("curl http://localhost:8080").stdout_bytes
+    assert b"<title>accueil (Référentiel SAEM)</title>" in html
     xml = Command.check_output("curl http://localhost:8081/oai")
     assert xml.startswith("<?xml ")
 

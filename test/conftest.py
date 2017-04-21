@@ -6,7 +6,7 @@ import testinfra
 
 
 @pytest.fixture
-def TestinfraBackend(pytestconfig, request):
+def host(pytestconfig, request):
     # Override the TestinfraBackend fixture,
     # all testinfra fixtures (i.e. modules) depend on it.
 
@@ -40,7 +40,7 @@ def TestinfraBackend(pytestconfig, request):
     request.addfinalizer(teardown)
 
     # Return a dynamic created backend
-    return testinfra.get_backend("docker://" + docker_id)
+    return testinfra.get_host("docker://" + docker_id)
 
 
 def pytest_addoption(parser):
@@ -56,7 +56,7 @@ def pytest_addoption(parser):
 
 
 def pytest_generate_tests(metafunc):
-    if "TestinfraBackend" in metafunc.fixturenames:
+    if "host" in metafunc.fixturenames:
 
         images = metafunc.config.option.docker_image
         if not images:
@@ -76,7 +76,7 @@ def pytest_generate_tests(metafunc):
             scope = "session"
 
         metafunc.parametrize(
-            "TestinfraBackend", images.split(","), indirect=True, scope=scope)
+            "host", images.split(","), indirect=True, scope=scope)
     if 'saem_ref_upgrade_revision' in metafunc.fixturenames:
         if not metafunc.config.option.upgrade_revision:
             pytest.skip()
@@ -86,17 +86,17 @@ def pytest_generate_tests(metafunc):
 
 
 @pytest.fixture
-def supervisor_service_name(SystemInfo):
-    if SystemInfo.distribution == "centos":
+def supervisor_service_name(host):
+    if host.system_info.distribution == "centos":
         return "supervisord"
     else:
         return "supervisor"
 
 
 @pytest.fixture
-def _wait_supervisord_started(Service, supervisor_service_name):
+def _wait_supervisord_started(host, supervisor_service_name):
     for _ in range(10):
-        if Service(supervisor_service_name).is_running:
+        if host.service(supervisor_service_name).is_running:
             break
         time.sleep(1)
     else:
@@ -104,10 +104,10 @@ def _wait_supervisord_started(Service, supervisor_service_name):
 
 
 @pytest.fixture
-def _wait_saemref_started(Command, _wait_supervisord_started):
+def _wait_saemref_started(host, _wait_supervisord_started):
     cmd = "supervisorctl status saemref"
     for _ in range(20):
-        status = Command.check_output(cmd).split()
+        status = host.check_output(cmd).split()
         if status[1] == "RUNNING":
             break
         else:

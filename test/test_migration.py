@@ -12,10 +12,10 @@ DUMPS = [fname for fname in os.listdir(DUMPS_DIR) if fname.endswith(".tar.gz")]
 @pytest.mark.docker_addopts("-v", "{0}:/dumps".format(DUMPS_DIR))
 @pytest.mark.use_postgres
 @pytest.mark.destructive
-def test_migration(Salt, Command, dump, saem_ref_upgrade_revision):
-    run = Command.check_output
-    db_host = Salt("environ.get", "POSTGRES_PORT_5432_TCP_ADDR")
-    db_port = Salt("environ.get", "POSTGRES_PORT_5432_TCP_PORT")
+def test_migration(host, dump, saem_ref_upgrade_revision):
+    run = host.check_output
+    db_host = host.salt("environ.get", "POSTGRES_PORT_5432_TCP_ADDR")
+    db_port = host.salt("environ.get", "POSTGRES_PORT_5432_TCP_PORT")
     config = "/home/saemref/etc/cubicweb.d/saemref/sources"
     run("sed -ri %s %s", "s@^db-driver=.*$@db-driver=postgres@", config)
     run("sed -ri %s %s", "s@^db-user=.*$@db-user=postgres@", config)
@@ -33,7 +33,7 @@ def test_migration(Salt, Command, dump, saem_ref_upgrade_revision):
             saem_ref_upgrade_revision)
     run("pip install %s", pkg)
     run("su - saemref -c 'CW_MODE=user cubicweb-ctl db-restore saemref /dumps/{0}'".format(dump))
-    out = Command("su - saemref -c 'CW_MODE=user cubicweb-ctl upgrade -v 0 --force --backup-db=n saemref'")
+    out = host.run("su - saemref -c 'CW_MODE=user cubicweb-ctl upgrade -v 0 --force --backup-db=n saemref'")
     # upgrade exit 0 even if a migration failed
     assert out.rc == 0
     assert "-> instance migrated." in out.stdout, "STDOUT:\n\n%s\n\nSTDERR:\n\n%s" % (out.stdout, out.stderr)

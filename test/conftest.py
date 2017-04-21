@@ -30,17 +30,12 @@ def host(pytestconfig, request):
 
     cmd.append(request.param)
     docker_id = subprocess.check_output(cmd).strip()
+    yield testinfra.get_host("docker://" + docker_id)
 
-    def teardown():
-        subprocess.check_output(["docker", "rm", "-f", docker_id])
-        if postgres_id is not None:
-            subprocess.check_output(["docker", "rm", "-f", postgres_id])
-
-    # Destroy the container at the end of the fixture life
-    request.addfinalizer(teardown)
-
-    # Return a dynamic created backend
-    return testinfra.get_host("docker://" + docker_id)
+    # teardown docker image
+    subprocess.check_output(["docker", "rm", "-f", docker_id])
+    if postgres_id is not None:
+        subprocess.check_output(["docker", "rm", "-f", postgres_id])
 
 
 def pytest_addoption(parser):

@@ -146,7 +146,7 @@ logstat-file=/tmp/{{ saemref.instance.name }}-all-in-one.stats
 {{ config('port', saemref.instance.port) }}
 
 # http server address on which to listen (default to everywhere)
-interface=
+interface=0.0.0.0
 
 # maximum length of HTTP request. Default to 100 MB.
 max-post-length=100MB

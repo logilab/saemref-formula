@@ -31,11 +31,11 @@ def test_pip_packages(host):
         pip_path='/home/saemref/venv/bin/pip')
     assert packages['cubicweb']['version'].startswith("3.24")
     assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 24, 5]
-    assert packages['cubicweb-saem-ref']['version'].startswith("0.15.4")
+    assert packages['cubicweb-saem-ref']['version'].startswith("0.15.5")
 
 
 @pytest.mark.parametrize("name, version", [
-    ("cubicweb_saem_ref", "0.15.4"),
+    ("cubicweb_saem_ref", "0.15.5"),
 ])
 def test_devinstall(host, name, version):
     cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"

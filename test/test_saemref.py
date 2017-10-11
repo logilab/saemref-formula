@@ -126,7 +126,11 @@ def test_saemref_running(host, supervisor_service_name):
     assert supervisord.group == "root"
 
     childs = host.process.filter(ppid=supervisord.pid)
-    assert [(c.comm, c.user, c.group) for c in childs] == 2 * [("gunicorn", "saemref", "saemref")]
+    # one cubicweb-ctl process to run looping task, one gunicorn process for the
+    # web ui, and another for the oai access point
+    assert sorted([(c.comm, c.user, c.group) for c in childs]) == [("cubicweb-ctl", "saemref", "saemref"),
+                                                                   ("gunicorn", "saemref", "saemref"),
+                                                                   ("gunicorn", "saemref", "saemref")]
 
     assert host.socket("tcp://0.0.0.0:8080").is_listening
     assert host.socket("tcp://0.0.0.0:8081").is_listening

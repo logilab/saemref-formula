@@ -29,13 +29,13 @@ def test_package_postgresclient(host):
 def test_pip_packages(host):
     packages = host.pip_package.get_packages(
         pip_path='/home/saemref/venv/bin/pip')
-    assert packages['cubicweb']['version'].startswith("3.24")
-    assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 24, 5]
-    assert packages['cubicweb-saem-ref']['version'].startswith("0.15.6")
+    assert packages['cubicweb']['version'].startswith("3.25")
+    assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 25, 2]
+    assert packages['cubicweb-saem-ref']['version'].startswith("0.16.0")
 
 
 @pytest.mark.parametrize("name, version", [
-    ("cubicweb_saem_ref", "0.15.6"),
+    ("saem_ref", "0.16.0"),
 ])
 def test_devinstall(host, name, version):
     cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"

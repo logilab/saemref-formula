@@ -118,15 +118,9 @@ Upgrades
 To force an upgrade to the latest version of saem-ref, connect to the minion as
 root, then run::
 
-    [root@minion] % supervisorctl stop all
-    [root@minion] % salt-call state.sls saemref.install pillar='{"upgrade": true}'
-    # be patient
-    [root@minion] % su - saemref
-    [saemref@minion] % . venv/bin/activate
-    (venv) [saemref@minion] % cubicweb-ctl upgrade saemref
-    # proceed to the cubicweb upgrade process
-    (venv) [saemref@minion] % exit
-    [root@minion] % supervisorctl start all
+    [root@minion] % salt-call state.sls saemref.upgrade
+
+If upgrade process fails, a backup is created in `/home/saemref/etc/cubicweb.d/saemref/backup`
 
 Testing
 =======

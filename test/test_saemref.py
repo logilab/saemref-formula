@@ -9,6 +9,7 @@ import pytest
 
 
 DATA_DIR = path.join(path.abspath(path.dirname(__file__)), "data")
+EXPECTED_SAEM_VERSION = "0.17"
 
 
 wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
@@ -30,12 +31,12 @@ def test_pip_packages(host):
     packages = host.pip_package.get_packages(
         pip_path='/home/saemref/venv/bin/pip')
     assert packages['cubicweb']['version'].startswith("3.25")
-    assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 25, 2]
-    assert packages['cubicweb-saem-ref']['version'].startswith("0.16.0")
+    assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 25]
+    assert packages['cubicweb-saem-ref']['version'].startswith(EXPECTED_SAEM_VERSION)
 
 
 @pytest.mark.parametrize("name, version", [
-    ("saem_ref", "0.16.0"),
+    ("saem_ref", EXPECTED_SAEM_VERSION),
 ])
 def test_devinstall(host, name, version):
     cmd = "/home/saemref/venv/bin/cubicweb-ctl list cubes"

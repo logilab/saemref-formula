@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 {% from "saemref/map.jinja" import saemref with context %}
 
-include:
 {% if grains['os_family'] == 'RedHat' %}
-  - epel
+include:
   - postgres.upstream
+
+epel-release:
+  pkg.installed
 {% endif %}
 
 pip-setuptools:

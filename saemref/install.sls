@@ -73,6 +73,14 @@ venv:
     - require:
       - pkg: legacy cleanup
 
+  pip.installed:
+    - name: pip
+    - upgrade: true
+    - bin_env: /home/{{ saemref.instance.user }}/venv
+    - user: {{ saemref.instance.user }}
+    - require:
+      - virtualenv: venv
+
 cubicweb in venv:
   pip.installed:
     - name: cubicweb

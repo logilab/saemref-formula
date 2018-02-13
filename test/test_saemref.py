@@ -30,7 +30,7 @@ def test_package_postgresclient(host):
 def test_pip_packages(host):
     packages = host.pip_package.get_packages(
         pip_path='/home/saemref/venv/bin/pip')
-    assert packages['cubicweb']['version'].startswith("3.25")
+    assert packages['cubicweb']['version'].startswith("3.26")
     assert map(int, packages['cubicweb']['version'].split('.')) >= [3, 25]
     assert packages['cubicweb-saem-ref']['version'].startswith(EXPECTED_SAEM_VERSION)
 

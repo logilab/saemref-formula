@@ -9,7 +9,7 @@ import pytest
 
 
 DATA_DIR = path.join(path.abspath(path.dirname(__file__)), "data")
-EXPECTED_SAEM_VERSION = "0.17.2"
+EXPECTED_SAEM_VERSION = "0.17.3"
 
 
 wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")

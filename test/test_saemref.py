@@ -189,6 +189,7 @@ EOF'''.format(token_secret))
 
 def cc_shell(host, script_name):
     return host.check_output(
+        'VIRTUAL_ENV=/home/saemref/venv/ '
         'CW_INSTANCES_DIR=/home/saemref/etc/cubicweb.d '
         '/home/saemref/venv/bin/cubicweb-ctl shell saemref '
         '/data/%s', script_name)

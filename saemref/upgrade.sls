@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 {% from "saemref/map.jinja" import saemref with context %}
 
+include:
+  - saemref.install
+  - saemref.supervisor
+
 supervisorctl stop all:
   cmd.run
 
@@ -9,9 +13,6 @@ drop old virtualenv:
     - name: /home/{{ saemref.instance.user }}/venv
     - require_in:
       - virtualenv: venv
-
-include:
-  - saemref.install
 
 cubicweb-upgrade:
   cmd.run:

@@ -138,7 +138,6 @@ cubicweb-create:
     - user: {{ saemref.instance.user }}
     - env:
         CW_MODE: user
-        VIRTUAL_ENV: /home/{{ saemref.instance.user }}/venv
     - require:
         - pkg: cube-packages
         - user: {{ saemref.instance.user }}

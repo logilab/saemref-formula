@@ -9,4 +9,3 @@ cubicweb-db-create:
     - user: {{ saemref.instance.user }}
     - env:
         CW_MODE: user
-        VIRTUAL_ENV: /home/{{ saemref.instance.user }}/venv

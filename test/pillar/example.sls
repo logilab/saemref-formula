@@ -41,4 +41,4 @@ saemref:
       pass: admin
 
 postgres:
-  version: 9.4
+  version: 9.6

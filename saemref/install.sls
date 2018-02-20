@@ -4,6 +4,7 @@
 {% if grains['os_family'] == 'RedHat' %}
 include:
   - postgres.upstream
+  - postgres.client
 
 epel-release:
   pkg.installed
@@ -31,7 +32,6 @@ cube-packages:
       - libgecode-dev
       - g++
     {% else %}{# RedHat #}
-      - postgresql94
       - graphviz-gd
       - python-devel
       - gecode-devel

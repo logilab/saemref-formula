@@ -18,13 +18,13 @@ wait_saemref_started = pytest.mark.usefixtures("_wait_saemref_started")
 
 def test_package_postgresclient(host):
     if host.system_info.distribution == "centos":
-        name = "postgresql94"
+        name = "postgresql96"
     else:  # Debian
         name = "postgresql-client"
 
     pkg = host.package(name)
     assert pkg.is_installed
-    assert pkg.version.startswith("9.4")
+    assert pkg.version.startswith("9.6")
 
 
 def test_pip_packages(host):
@@ -99,7 +99,7 @@ def test_pillars(host):
         }
     }
     assert pillars == {
-        'postgres': {'version': 9.4},
+        'postgres': {'version': 9.6},
         'saemref': {'lookup': expected}
     }
     host.salt("state.sls", "test_pillar")

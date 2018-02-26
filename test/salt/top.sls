@@ -1,5 +1,5 @@
 base:
   '*':
-    - saemref.db-create
+    - saemref
     - saemref.supervisor
     - saemref.client

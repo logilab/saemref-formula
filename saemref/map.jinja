@@ -17,3 +17,5 @@
 %}
 
 {% set is_docker_build = (salt['cmd.retcode']('/bin/sh -c "(readlink -f /sbin/init | grep -q systemd) && ! (readlink -f /proc/1/exe | grep systemd)"') == 0) %}
+
+{% set session_secure = 'true' if salt['pillar.get']('saemref:lookup:instance:base_url').startswith('https://') else 'false' %}

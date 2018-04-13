@@ -117,6 +117,7 @@ def test_pillars(host):
     assert pillars == expected
 
 
+@pytest.mark.skip('docker setup needs rework to get postgres support')
 @wait_saemref_started
 def test_saemref_running(host, supervisor_service_name):
     assert host.service(supervisor_service_name).is_enabled
@@ -147,6 +148,7 @@ def test_saemref_sync_source_cronjob(host):
     assert 'cubicweb-ctl source-sync --loglevel error saemref' in jobs
 
 
+@pytest.mark.skip('docker setup needs rework to get postgres support')
 @wait_saemref_started
 @pytest.mark.docker_addopts("-v", "{0}:/data".format(DATA_DIR))
 @pytest.mark.destructive

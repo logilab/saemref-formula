@@ -78,7 +78,6 @@ def test_pillars(host):
             'pass': 'saemref',
             'port': '',
             'user': 'saemref'},
-        'install': {'dev': True},
         'instance': {
             'anonymous_password': 'anon',
             'anonymous_user': 'anon',

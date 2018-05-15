@@ -99,26 +99,6 @@ cubicweb-saem_ref:
       - user: {{ saemref.instance.user }}
       - virtualenv: venv
 
-{% if saemref.install.dev %}
-
-dev dependencies:
-  pkg.installed:
-    - pkgs:
-      - mercurial
-
-cubicweb-saem_ref from hg:
-  pip.installed:
-    - name: hg+http://hg.logilab.org/review/cubes/saem_ref#egg=cubicweb-saem_ref
-    - user: {{ saemref.instance.user }}
-    - bin_env: /home/{{ saemref.instance.user }}/venv
-    - require:
-      - pkg: dev dependencies
-      - pip: cubicweb in venv
-      - user: {{ saemref.instance.user }}
-      - virtualenv: venv
-
-{% endif %}
-
 {% if saemref.instance.test_mode -%}
 {% for fname in ['languages.csv', 'mime_types.csv'] %}
 {{ ['/home', saemref.instance.user, 'venv', 'lib', 'python2.7', 'site-packages', 'cubicweb_seda', 'migration', 'data', fname]|join('/') }}:

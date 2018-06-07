@@ -57,11 +57,16 @@ def test_devinstall(host, name, version):
 @pytest.mark.destructive()
 def test_idempotence(host, state, exclude):
     result = host.salt("state.sls", state)
+    failing = []
     for item in result.values():
-        assert item["result"] is True, item
+        if not item["result"]:
+            failing.append(item)
+            continue
         if item["__id__"] in exclude:
             continue
-        assert item["changes"] == {}
+        if item["changes"] != {}:
+            failing.append(item)
+    assert not failing, failing
 
 
 def test_pillars(host):

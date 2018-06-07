@@ -84,6 +84,7 @@ venv:
 cubicweb in venv:
   pip.installed:
     - name: cubicweb
+    - upgrade: true
     - bin_env: /home/{{ saemref.instance.user }}/venv
     - user: {{ saemref.instance.user }}
     - require:
@@ -92,6 +93,7 @@ cubicweb in venv:
 cubicweb-saem_ref:
   pip.installed:
     - name: cubicweb-saem_ref
+    - upgrade: true
     - user: {{ saemref.instance.user }}
     - bin_env: /home/{{ saemref.instance.user }}/venv
     - require:
@@ -129,6 +131,7 @@ gunicorn in venv:
     - pkgs:
       - gunicorn
       - futures
+    - upgrade: true
     - bin_env: /home/{{ saemref.instance.user }}/venv
     - user: {{ saemref.instance.user }}
     - require:

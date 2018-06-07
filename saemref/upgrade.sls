@@ -3,6 +3,7 @@
 
 include:
   - saemref.install
+  - saemref.config
   - saemref.supervisor
 
 supervisorctl stop all:

@@ -3,6 +3,7 @@ saemref:
     instance:
       name: saemref
       user: saemref
+      base_url: https://saem-ref.example.com/
       # http port
       port: 8080
       oai_port: 8081

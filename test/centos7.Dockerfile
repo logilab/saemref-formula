@@ -6,6 +6,7 @@ RUN yum -y install epel-release && \
     yum -y install https://kojipkgs.fedoraproject.org//packages/http-parser/2.0/5.20121128gitcd01361.el7/x86_64/http-parser-2.0-5.20121128gitcd01361.el7.x86_64.rpm && \
     yum -y install https://repo.saltstack.com/yum/redhat/salt-repo-2016.11-2.el7.noarch.rpm && \
     yum clean expire-cache && \
+    yum -y install systemd-sysv && \
     yum -y install salt-minion python-pygit2 git net-tools libgit2-devel python-devel gcc
 
 

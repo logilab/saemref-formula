@@ -50,7 +50,9 @@ def cli():
 @click.option('--pillar-root', type=click.Path(exists=True), default='test/pillar')
 @click.option('--log-level', type=click.Choice(['debug', 'info', 'warning', 'error']),
               default='info')
-def build(image, salt, tag, file_root, pillar_root, log_level):
+@click.option('--no-cache', is_flag=True, help="disable docker cache",
+              default=False)
+def build(image, salt, tag, file_root, pillar_root, log_level, no_cache):
     dockerfile = "test/{0}.Dockerfile".format(image)
     if salt:
         dockerfile_content = open(dockerfile, "r").read()
@@ -74,6 +76,8 @@ def build(image, salt, tag, file_root, pillar_root, log_level):
     if tag is None:
         tag = get_tag(image, salt)
     args = ["docker", "build"]
+    if no_cache:
+        args.append("--no-cache")
     http_proxy = get_http_proxy()
     if http_proxy:
         args.extend(["--build-arg", "http_proxy={0}".format(http_proxy)])

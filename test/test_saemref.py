@@ -88,6 +88,8 @@ def test_pillars(host):
             'authtk_session_secret': 'Polichinelle1',
             'name': 'saemref',
             'base_url': base_url,
+            'default_ark_naa_who': 'ADGIRONDE',
+            'default_ark_naa_what': 25651,
             'pool_size': 8,
             'port': 8080,
             'oai_port': 8081,

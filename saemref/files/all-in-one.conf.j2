@@ -137,6 +137,17 @@ logstat-file=/tmp/{{ saemref.instance.name }}-all-in-one.stats
 list-max-size=20
 
 
+[SAEM_REF]
+
+# Name of default ARK Name Assigning Authority (who) (only used at database
+# initialization)
+default-ark-naa-who={{ saemref.instance.default_ark_naa_who }}
+
+# Number of default ARK Name Assigning Authority (what) (only used at database
+# initialization)
+default-ark-naa-what={{ saemref.instance.default_ark_naa_what }}
+
+
 [UI]
 
 # should css be compiled and store in uicache

@@ -4,6 +4,11 @@ saemref:
       name: saemref
       user: saemref
       base_url: https://saem-ref.example.com/
+
+      # default ARK NAA
+      default_ark_naa_who: ADGIRONDE
+      default_ark_naa_what: 25651
+
       # http port
       port: 8080
       oai_port: 8081

@@ -56,15 +56,6 @@ gmap-key=
 
 [MAIN]
 
-# web server root url on https. By specifying this option your site can be
-# available as an http and https site. Authenticated users will in this case be
-# authenticated and once done navigate through the https site. IMPORTANTE NOTE:
-# to do this work, you should have your apache redirection include "https" as
-# base url path so cubicweb can differentiate between http vs https access. For
-# instance: RewriteRule ^/demo/(.*) http://127.0.0.1:8080/https/$1 [L,P] where
-# the cubicweb web server is listening on port 8080.
-#https-url=
-
 # host name if not correctly detectable through gethostname
 #host=
 
@@ -82,6 +73,9 @@ pid-file=/tmp/{{ saemref.instance.name }}-all-in-one.pid
 # close his browser, he will have to reauthenticate after this time of
 # inactivity. Default to 24h.
 cleanup-session-time=1d
+
+# enable the connection pooler
+connections-pooler-enabled=yes
 
 # size of the connections pool. Each source supporting multiple connections
 # will have this number of opened connections.
@@ -139,6 +133,15 @@ logstat-file=/tmp/{{ saemref.instance.name }}-all-in-one.stats
 # the e-mail address of an administrator of the OAI-PMH repository
 #admin-email=
 
+# maximum number of items for request returning a list of discrete entities
+list-max-size=20
+
+
+[UI]
+
+# should css be compiled and store in uicache
+use-uicache=yes
+
 
 [WEB]
 
@@ -172,6 +175,11 @@ repository-uri=inmemory://
 # web instance query log file
 #query-log-file=
 
+# Same as cleanup-session-time but specific to anonymous sessions. You can have
+# a much smaller timeout here since it will be transparent to the user. Default
+# to 5min.
+cleanup-anonymous-session-time=5min
+
 # base url for static data, if different from "${base-url}/data/". If served
 # from a different domain, that domain should allow cross-origin requests.
 #datadir-url=
@@ -186,11 +194,6 @@ realm=cubicweb
 # will expire when the user exist its browser. Should be 0 or greater than
 # repository's session-time.
 http-session-time=0
-
-# Same as cleanup-session-time but specific to anonymous sessions. You can have
-# a much smaller timeout here since it will be transparent to the user. Default
-# to 5min.
-cleanup-anonymous-session-time=5min
 
 # Mail used as recipient to report bug in this instance, if you want this
 # feature on

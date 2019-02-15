@@ -9,7 +9,7 @@ import pytest
 
 
 DATA_DIR = path.join(path.abspath(path.dirname(__file__)), "data")
-EXPECTED_SAEM_VERSION = "0.22."
+EXPECTED_SAEM_VERSION = "0.22.2"
 
 
 wait_supervisord_started = pytest.mark.usefixtures("_wait_supervisord_started")
@@ -100,7 +100,10 @@ def test_pillars(host):
             'wsgi': True,
             'wsgi_threads': 8,
             'wsgi_workers': 2,
-        }
+        },
+        'versions': {
+            'saemref': '0.22.2',
+        },
     }
     assert pillars == {
         'postgres': {'version': 9.6},

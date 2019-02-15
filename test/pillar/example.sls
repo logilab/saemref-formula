@@ -1,5 +1,7 @@
 saemref:
   lookup:
+    versions:
+      saemref: 0.22.2
     instance:
       name: saemref
       user: saemref

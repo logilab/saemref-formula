@@ -90,9 +90,14 @@ cubicweb in venv:
     - require:
       - virtualenv: venv
 
+{% if saemref.versions.saemref -%}
+  {% set saemref_pkgname = "cubicweb-saem_ref == {}".format(saemref.versions.saemref) -%}
+{% else -%}
+  {% set saemref_pkgname = "cubicweb-saem_ref" -%}
+{% endif -%}
 cubicweb-saem_ref:
   pip.installed:
-    - name: cubicweb-saem_ref
+    - name: {{ saemref_pkgname }}
     - upgrade: true
     - user: {{ saemref.instance.user }}
     - bin_env: /home/{{ saemref.instance.user }}/venv

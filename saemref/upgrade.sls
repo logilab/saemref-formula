@@ -18,7 +18,7 @@ drop old virtualenv:
 cubicweb-upgrade:
   cmd.run:
     - name: /home/{{ saemref.instance.user }}/venv/bin/cubicweb-ctl upgrade --backup-db=y --nostartstop --force --verbosity=0 {{ saemref.instance.name }}
-    - user: {{ saemref.instance.user }}
+    - runas: {{ saemref.instance.user }}
     - env:
         CW_MODE: user
     - require:

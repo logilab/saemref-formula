@@ -122,7 +122,7 @@ cubicweb-create:
   cmd.run:
     - name: /home/{{ saemref.instance.user }}/venv/bin/cubicweb-ctl create --no-db-create -a saem_ref {{ saemref.instance.name }}
     - creates: /home/{{ saemref.instance.user }}/etc/cubicweb.d/{{ saemref.instance.name }}
-    - user: {{ saemref.instance.user }}
+    - runas: {{ saemref.instance.user }}
     - env:
         CW_MODE: user
     - require:

@@ -68,7 +68,7 @@ legacy cleanup:
 venv:
   virtualenv.managed:
     - name: /home/{{ saemref.instance.user }}/venv
-    - system_site_packages: true
+    - system_site_packages: false
     - user: {{ saemref.instance.user }}
     - require:
       - pkg: legacy cleanup

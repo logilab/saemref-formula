@@ -5,6 +5,7 @@
 include:
   - postgres.upstream
   - postgres.client
+  - postgres.dev
 
 epel-release:
   pkg.installed

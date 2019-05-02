@@ -10,18 +10,6 @@ epel-release:
   pkg.installed
 {% endif %}
 
-pip-setuptools:
-  pkg.latest:
-    - pkgs:
-    {% if grains['os_family'] == 'Debian' %}
-      - python-pip
-    {% else %}{# RedHat #}
-      - python2-pip
-    {% endif %}
-  pip.installed:
-    - name: setuptools
-    - ignore_installed: true
-
 cube-packages:
   pkg.latest:
     - pkgs:
@@ -29,20 +17,18 @@ cube-packages:
       - postgresql-client
       - graphviz
       - python-all-dev
+      - python-pip
       - libgecode-dev
       - g++
     {% else %}{# RedHat #}
       - graphviz-gd
       - python-devel
+      - python2-pip
       - gecode-devel
       - gcc-c++
     {% endif %}
       - gettext
       - python-virtualenv
-      - python-lxml
-      - python-psycopg2
-    - require:
-      - pip: pip-setuptools
 
 create-saemref-user:
   user.present:

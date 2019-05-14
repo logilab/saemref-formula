@@ -73,8 +73,18 @@ venv:
     - require:
       - pkg: legacy cleanup
 
+pip in venv:
   pip.installed:
     - name: pip
+    - upgrade: true
+    - bin_env: /home/{{ saemref.instance.user }}/venv
+    - user: {{ saemref.instance.user }}
+    - require:
+      - virtualenv: venv
+
+setuptools in venv:
+  pip.installed:
+    - name: setuptools
     - upgrade: true
     - bin_env: /home/{{ saemref.instance.user }}/venv
     - user: {{ saemref.instance.user }}
@@ -89,6 +99,8 @@ cubicweb in venv:
     - user: {{ saemref.instance.user }}
     - require:
       - virtualenv: venv
+      - pip: setuptools in venv
+      - pip: pip in venv
 
 {% if saemref.versions.saemref -%}
   {% set saemref_pkgname = "cubicweb-saem_ref == {}".format(saemref.versions.saemref) -%}

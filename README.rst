@@ -1,6 +1,8 @@
 .. image:: https://travis-ci.org/logilab/saemref-formula.svg?branch=master
     :target: https://travis-ci.org/logilab/saemref-formula
 
+.. warning:: this project is unmaintained
+
 ===============
 saemref-formula
 ===============
